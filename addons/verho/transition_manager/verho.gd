@@ -4,18 +4,12 @@ extends Control
 ## transition from a specific library. Will default if either the library or transition does
 ## not exist.
 signal load_new_scene(scene_name:String, library:String, transition:String)
-
 ## Emitted once a scene is loaded and about to be added to the SceneTree.
 signal loaded_scene(scene_name:String)
-
 ## Signal emitted when a transition has finished "going in" -- i.e., the space is visible.
 signal faded_in
-
 ## Signal emitted when a transition has finished "going out" -- i.e., the screen is obscured.
 signal faded_out
-
-## Emitted during loading for systems to see at what percentage the load is at.
-signal loading_progress(progress:float)
 
 var print_optional_errors:bool = true
 var scene_folder_path:String = ""
@@ -50,7 +44,7 @@ func _ready():
 	_main_scene = root.current_scene
 	
 	connect("load_new_scene", _load_new_scene)
-	connect("faded_out", _fade_out)
+	connect("faded_out", _initialize_resource_loader)
 	
 	# This will be turned on and off at-will when scenes need to be loaded
 	set_process(false)
@@ -92,7 +86,7 @@ func _process(_delta):
 	##
 	
 	progress = progress[0]
-	emit_signal("loading_progress", progress)
+	_current_transition.progress = progress
 	
 	if progress >= 1:
 		if (_current_transition.HOLD_FADE_IN == false or _current_transition.finished_out_transition) and\
@@ -242,7 +236,7 @@ func _select_transition(library:String, transition_name:String) -> PackedScene:
 	return _transitions[library]["transitions"][transition_name]["scene"]
 ##
 
-func _fade_out():
+func _initialize_resource_loader():
 	# async loading initialization...
 	var error = ResourceLoader.load_threaded_request(_scene_path)
 	
@@ -262,10 +256,22 @@ func _fade_out():
 
 ## Call to swap out the underlying scene in Main Scene.
 func change_scene(new_scene:String, library:String, transition:String, speed:float = 1.0):
-	pass
-##
-
-## Play the transition without loading in a scene within the Porta system.
-func play_transition(library:String, transition:String, direction:BaseTransition.PLAY_DIRECTION, speed:float = 1.0):
-	pass
+	_current_transition = _select_transition(library, transition).instantiate()
+	add_child(_current_transition)
+	_current_transition.play(BaseTransition.PLAY_DIRECTION.OUT)
+	
+	if scene_folder_path != "":
+		_scene_path = "res://" + scene_folder_path + new_scene + ".tscn"
+	else:
+		_scene_path = "res://" + new_scene + ".tscn"
+	##
+	
+	_scene_name = new_scene
+	
+	# check if we have to wait until the transition is fully done
+	if _current_transition.ONLY_LOAD_WHEN_FULLY_OUT:
+		return # bail early, don't continue
+	##
+	
+	_initialize_resource_loader()
 ##

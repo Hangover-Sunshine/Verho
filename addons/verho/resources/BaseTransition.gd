@@ -10,12 +10,14 @@ enum PLAY_DIRECTION {
 ## to have a type of "Press any key to continue..." that is controlled in the extended script.
 @export var HOLD_FADE_IN:bool = false
 
-## Whether or not the transition should hang on to the mouse
-@export var CAPTURE_MOUSE:bool = true
-
 ## Whether to begin loading as soon as change_scene() is called or the load_new_scene signal
 ## is emitted. If true, then the transition out MUST finish first before loading is allowed to begin.
 @export var ONLY_LOAD_WHEN_FULLY_OUT:bool = false
+
+## Set this so the transition knows how far along in the loading process it is.
+## Optional use by extendees, but here instead of requiring Signals to be fired every frame.
+## This will be given as a number between 0 and 1, inclusive.
+var progress:float = 0
 
 ## Inform the PortaTransitionSystem that we are done playing the 'out' transition.
 var finished_out_transition:bool = false
@@ -27,9 +29,7 @@ var load_level:bool = false
 var finished_loading:bool = false
 
 func _ready():
-	if CAPTURE_MOUSE:
-		mouse_filter = Control.MOUSE_FILTER_STOP
-	##
+	mouse_filter = Control.MOUSE_FILTER_STOP
 ##
 
 func play(_direction:PLAY_DIRECTION, _duration:float = 1):

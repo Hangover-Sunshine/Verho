@@ -7,7 +7,6 @@ var fade_in:bool = false
 
 func _ready():
 	super()
-	Verho.connect("loading_progress", _loading_progress)
 	$Label.visible = false
 ##
 
@@ -21,6 +20,15 @@ func _process(_delta):
 	if finished_loading and $Label.visible == false:
 		$Label.visible = true
 		$AP_TextPulse.play("text_pulse")
+	##
+	
+	if $ProgressBar.visible:
+		$ProgressBar.value = progress * 100
+		
+		if $ProgressBar.value == 100:
+			$ProgressBar.visible = false
+			$LoadingLabel.visible = false
+		##
 	##
 ##
 
@@ -47,14 +55,5 @@ func _on_animation_player_animation_finished(_anim_name):
 	
 	if fade_in:
 		queue_free() # remove self
-	##
-##
-
-func _loading_progress(progress:float):
-	$ProgressBar.value = progress * 100
-	
-	if $ProgressBar.value == 100:
-		$ProgressBar.visible = false
-		$LoadingLabel.visible = false
 	##
 ##

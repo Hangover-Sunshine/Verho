@@ -11,11 +11,13 @@ func _loaded_scene(scene_name):
 ##
 
 func _on_scene_2_button_black_pressed():
-	Verho.emit_signal("load_new_scene", "scenes/Scene2D_2", "", "BlackFade")
+	#Verho.emit_signal("load_new_scene", "scenes/Scene2D_2", "", "BlackFade")
+	Verho.change_scene("scenes/Scene2D_2", "", "BlackFade")
 ##
 
 func _on_scene_2_button_white_pressed():
-	Verho.emit_signal("load_new_scene", "scenes/Scene2D_2", "", "WhiteFade")
+	#Verho.emit_signal("load_new_scene", "scenes/Scene2D_2", "", "WhiteFade")
+	Verho.change_scene("scenes/Scene2D_2", "", "WhiteFade")
 ##
 
 func _on_scene_2_button_dissolve_pressed():
