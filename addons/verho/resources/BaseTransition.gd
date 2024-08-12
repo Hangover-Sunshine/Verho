@@ -10,8 +10,8 @@ enum PLAY_DIRECTION {
 ## to have a type of "Press any key to continue..." that is controlled in the extended script.
 @export var HOLD_FADE_IN:bool = false
 
-## Whether to begin loading as soon as change_scene() is called or the load_new_scene signal
-## is emitted. If true, then the transition out MUST finish first before loading is allowed to begin.
+## Whether to begin loading as soon as change_scene() is called.
+## If true, then the transition out MUST finish first before loading is allowed to begin.
 @export var ONLY_LOAD_WHEN_FULLY_OUT:bool = false
 
 ## Set this so the transition knows how far along in the loading process it is.
@@ -29,9 +29,10 @@ var load_level:bool = false
 var finished_loading:bool = false
 
 func _ready():
+	# Will be deleted once the transition process is done, by our self
 	mouse_filter = Control.MOUSE_FILTER_STOP
 ##
 
-func play(_direction:PLAY_DIRECTION, _duration:float = 1):
+func play(_direction:PLAY_DIRECTION, _speed_scale:float = 1):
 	pass
 ##

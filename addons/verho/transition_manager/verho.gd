@@ -112,7 +112,11 @@ func _process(_delta):
 			_curr_scene = new_scene
 			_main_scene.add_child(new_scene)
 			
+			# inform the prior scene it's time to clean up
+			emit_signal("added_scene", _scene_name)
+			
 			# play the animation player and make sure it knows we're fading in
+			# only do this AFTER add_child is done, never before!
 			_current_transition.play(BaseTransition.PLAY_DIRECTION.IN)
 			
 			# stop from coming back here
