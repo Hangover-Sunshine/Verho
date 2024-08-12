@@ -22,5 +22,6 @@ func _ready():
 ##
 
 func _transition_to_scene():
-	Verho.emit_signal("load_new_scene", MAIN_SCENE, "", "BlackFade")
+	#Verho.emit_signal("load_new_scene", MAIN_SCENE, "", "BlackFade")
+	Verho.change_scene(MAIN_SCENE, "", "BlackFade")
 ##

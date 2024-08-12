@@ -21,21 +21,26 @@ func _on_scene_2_button_white_pressed():
 ##
 
 func _on_scene_2_button_dissolve_pressed():
-	Verho.emit_signal("load_new_scene", "scenes/Scene2D_2", "", "DissolveFade")
+	#Verho.emit_signal("load_new_scene", "scenes/Scene2D_2", "", "DissolveFade")
+	Verho.change_scene("scenes/Scene2D_2", "", "DissolveFade")
 ##
 
 func _on_scene_2_button_p_2c_pressed():
-	Verho.emit_signal("load_new_scene", "scenes/Scene2D_2", "", "Fade_P2C")
+	#Verho.emit_signal("load_new_scene", "scenes/Scene2D_2", "", "Fade_P2C")
+	Verho.change_scene("scenes/Scene2D_2", "", "Fade_P2C")
 ##
 
 func _on_scene_3_button_black_pressed():
-	Verho.emit_signal("load_new_scene", "scenes/ReallyBigScene2D", "", "BlackFade")
+	#Verho.emit_signal("load_new_scene", "scenes/ReallyBigScene2D", "", "BlackFade")
+	Verho.change_scene("scenes/ReallyBigScene2D", "", "BlackFade")
 ##
 
 func _on_scene_3_button_loading_pressed():
-	Verho.emit_signal("load_new_scene", "scenes/ReallyBigScene2D", "", "FadeProgessBar")
+	#Verho.emit_signal("load_new_scene", "scenes/ReallyBigScene2D", "", "FadeProgessBar")
+	Verho.change_scene("scenes/ReallyBigScene2D", "", "FadeProgessBar")
 ##
 
 func _on_scene_3_button_loading_p_2c_pressed():
-	Verho.emit_signal("load_new_scene", "scenes/ReallyBigScene2D", "", "Fade_ProgessBar_P2C")
+	#Verho.emit_signal("load_new_scene", "scenes/ReallyBigScene2D", "", "Fade_ProgessBar_P2C")
+	Verho.change_scene("scenes/ReallyBigScene2D", "", "Fade_ProgessBar_P2C")
 ##

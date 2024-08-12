@@ -19,13 +19,13 @@ enum PLAY_DIRECTION {
 ## This will be given as a number between 0 and 1, inclusive.
 var progress:float = 0
 
-## Inform the PortaTransitionSystem that we are done playing the 'out' transition.
+## Inform the tranisition system that we are done playing the 'out' transition.
 var finished_out_transition:bool = false
 
-## Inform the PortaTransitionSystem that we are done transitioning and ready to load/add the scene.
+## Inform the tranisition system that we are done transitioning and ready to load/add the scene.
 var load_level:bool = false
 
-## Informed from the PortaTransitionSystem that we are done loading the next scene.
+## Informed from the tranisition system that we are done loading the next scene.
 var finished_loading:bool = false
 
 func _ready():

@@ -1,12 +1,13 @@
 extends Control
 
-## Emitted from somewhere in the project to begin loading a scene, with a specified
-## transition from a specific library. Will default if either the library or transition does
-## not exist.
-signal load_new_scene(scene_name:String, library:String, transition:String)
+## Emitted when change_scene() is called to inform other potential systems
+## that the currently active level/scene is about to change.
+signal load_new_scene(scene_name:String)
 ## Emitted once a scene is loaded and about to be added to the SceneTree.
 signal loaded_scene(scene_name:String)
-## Signal emitted when a transition has finished "going in" -- i.e., the space is visible.
+## Emitted once a scene is added to the SceneTree.
+signal added_to_scene(scene_name:String)
+## Signal emitted when a transition has finished "going in" -- i.e., the screen is visible.
 signal faded_in
 ## Signal emitted when a transition has finished "going out" -- i.e., the screen is obscured.
 signal faded_out
@@ -31,7 +32,7 @@ var _curr_scene:Node
 
 func _init():
 	# Transition system will ALWAYS be available to run, not matter what.
-	# Otherwise, how do we get out of a paused menu when a player selects "run"?
+	# Otherwise, how do we get out of a paused menu when a player selects "quit"?
 	process_mode = Node.PROCESS_MODE_ALWAYS
 ##
 
