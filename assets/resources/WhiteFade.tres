@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TransitionResource" load_steps=3 format=3 uid="uid://bxpgajynwwqx4"]
+
+[ext_resource type="PackedScene" uid="uid://p365pplxpa7c" path="res://prefabs/transitions/WhiteFadeTransition.tscn" id="1_qmr81"]
+[ext_resource type="Script" path="res://addons/verho/resources/TransitionResource.gd" id="1_t1o7y"]
+
+[resource]
+script = ExtResource("1_t1o7y")
+TRANSITION_NAME = "WhiteFade"
+TRANSITION_SCENE = ExtResource("1_qmr81")

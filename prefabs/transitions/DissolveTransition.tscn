@@ -1,0 +1,82 @@
+[gd_scene load_steps=11 format=3 uid="uid://vr71p3ld6ht6"]
+
+[ext_resource type="Shader" path="res://scripts/shaders/burn.gdshader" id="1_7i7mo"]
+[ext_resource type="Script" path="res://scripts/transitions/WhiteFadeTransition.gd" id="1_b113v"]
+
+[sub_resource type="Gradient" id="Gradient_hheit"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_83ay3"]
+gradient = SubResource("Gradient_hheit")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ge6xr"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_6b6a2"]
+noise = SubResource("FastNoiseLite_ge6xr")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pjljl"]
+shader = ExtResource("1_7i7mo")
+shader_parameter/integrity = 1.0
+shader_parameter/burn_size = 1.3
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_6b6a2")
+shader_parameter/burn_texture = SubResource("GradientTexture1D_83ay3")
+
+[sub_resource type="Animation" id="Animation_2iiu5"]
+resource_name = "fade"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:material:shader_parameter/integrity")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, -2),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_1qisp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:material:shader_parameter/integrity")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wnxph"]
+_data = {
+"RESET": SubResource("Animation_1qisp"),
+"fade": SubResource("Animation_2iiu5")
+}
+
+[node name="DissolveTransition" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_b113v")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_pjljl")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_wnxph")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

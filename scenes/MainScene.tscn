@@ -1,0 +1,36 @@
+[gd_scene load_steps=9 format=3 uid="uid://dtld3oo4n4uxj"]
+
+[ext_resource type="Script" path="res://addons/verho/resources/TransitionBank.gd" id="1_6x83s"]
+[ext_resource type="Script" path="res://scripts/MainScene.gd" id="1_vyplv"]
+[ext_resource type="Resource" uid="uid://mrlm5ykhepls" path="res://assets/resources/BlackFade.tres" id="2_632fp"]
+[ext_resource type="Resource" uid="uid://bxpgajynwwqx4" path="res://assets/resources/WhiteFade.tres" id="4_jtuxf"]
+[ext_resource type="Resource" uid="uid://600y11mweoc3" path="res://assets/resources/DissolveFade.tres" id="5_dnapi"]
+[ext_resource type="Resource" uid="uid://x8eytxek8gxr" path="res://assets/resources/BlackFade_PressToContinue.tres" id="6_vo8xh"]
+[ext_resource type="Resource" uid="uid://c1tfgdvdxi8l4" path="res://assets/resources/FadeProgressBar.tres" id="7_hf47d"]
+[ext_resource type="Resource" uid="uid://c6vwsjt3ok8vf" path="res://assets/resources/Fade_ProgressBar_P2C.tres" id="8_2j2gw"]
+
+[node name="MainNode" type="Node" node_paths=PackedStringArray("CURR_MAIN_SCENE")]
+script = ExtResource("1_vyplv")
+CURR_MAIN_SCENE = NodePath("Control")
+MAIN_SCENE = "scenes/Scene2D_1"
+
+[node name="TransitionBank" type="Node" parent="."]
+script = ExtResource("1_6x83s")
+TRANSITIONS = Array[Resource("res://addons/verho/resources/TransitionResource.gd")]([ExtResource("2_632fp"), ExtResource("4_jtuxf"), ExtResource("5_dnapi"), ExtResource("6_vo8xh"), ExtResource("7_hf47d"), ExtResource("8_2j2gw")])
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)

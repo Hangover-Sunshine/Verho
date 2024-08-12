@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TransitionResource" load_steps=3 format=3 uid="uid://c6vwsjt3ok8vf"]
+
+[ext_resource type="Script" path="res://addons/verho/resources/TransitionResource.gd" id="1_eeure"]
+[ext_resource type="PackedScene" uid="uid://bxbk1gfxxe2sq" path="res://prefabs/transitions/Fade_ProgressBar_P2C.tscn" id="1_hsnfw"]
+
+[resource]
+script = ExtResource("1_eeure")
+TRANSITION_NAME = "Fade_ProgessBar_P2C"
+TRANSITION_SCENE = ExtResource("1_hsnfw")

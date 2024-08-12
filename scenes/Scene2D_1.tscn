@@ -1,0 +1,63 @@
+[gd_scene load_steps=2 format=3 uid="uid://dx1v8y3xvmpbp"]
+
+[ext_resource type="Script" path="res://scripts/Scene2D_1.gd" id="1_13bi6"]
+
+[node name="Scene2d1" type="Node2D"]
+script = ExtResource("1_13bi6")
+
+[node name="Scene2Button_BLACK" type="Button" parent="."]
+offset_left = 60.0
+offset_top = 320.0
+offset_right = 339.0
+offset_bottom = 351.0
+text = "Go to Scene 2 with Black Transition"
+
+[node name="Scene2Button_WHITE" type="Button" parent="."]
+offset_left = 60.0
+offset_top = 370.0
+offset_right = 343.0
+offset_bottom = 401.0
+text = "Go to Scene 2 with White Transition"
+
+[node name="Scene2Button_DISSOLVE" type="Button" parent="."]
+offset_left = 60.0
+offset_top = 420.0
+offset_right = 362.0
+offset_bottom = 451.0
+text = "Go to Scene 2 with Dissolve Transition"
+
+[node name="Scene2Button_P2C" type="Button" parent="."]
+offset_left = 60.0
+offset_top = 470.0
+offset_right = 362.0
+offset_bottom = 501.0
+text = "Go to Scene 2 with Press 2 Continue"
+
+[node name="Scene3Button_BLACK" type="Button" parent="."]
+offset_left = 500.0
+offset_top = 320.0
+offset_right = 680.0
+offset_bottom = 351.0
+text = "Go to Very Big Scene"
+
+[node name="Scene3Button_LOADING" type="Button" parent="."]
+offset_left = 500.0
+offset_top = 370.0
+offset_right = 814.0
+offset_bottom = 401.0
+text = "Go to Very Big Scene with Loading Bar"
+
+[node name="Scene3Button_LOADING_P2C" type="Button" parent="."]
+offset_left = 500.0
+offset_top = 420.0
+offset_right = 814.0
+offset_bottom = 451.0
+text = "Go to Very Big Scene with Loading Bar + Press 2 Continue"
+
+[connection signal="pressed" from="Scene2Button_BLACK" to="." method="_on_scene_2_button_black_pressed"]
+[connection signal="pressed" from="Scene2Button_WHITE" to="." method="_on_scene_2_button_white_pressed"]
+[connection signal="pressed" from="Scene2Button_DISSOLVE" to="." method="_on_scene_2_button_dissolve_pressed"]
+[connection signal="pressed" from="Scene2Button_P2C" to="." method="_on_scene_2_button_p_2c_pressed"]
+[connection signal="pressed" from="Scene3Button_BLACK" to="." method="_on_scene_3_button_black_pressed"]
+[connection signal="pressed" from="Scene3Button_LOADING" to="." method="_on_scene_3_button_loading_pressed"]
+[connection signal="pressed" from="Scene3Button_LOADING_P2C" to="." method="_on_scene_3_button_loading_p_2c_pressed"]
