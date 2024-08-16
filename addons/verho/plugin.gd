@@ -7,7 +7,7 @@ func _enter_tree():
 	# Add the TransitionBank
 	add_custom_type("TransitionBank", "Node",
 					preload("resources/TransitionBank.gd"),
-					preload("resources/icon.png"))
+					preload("resources/curtains-white.svg"))
 ##
 
 func _exit_tree():
