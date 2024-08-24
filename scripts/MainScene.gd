@@ -10,6 +10,9 @@ extends Node
 @export var DELAY:float = 5
 
 func _ready():
+	# uncomment to get rid of the printed error
+	#Verho.default_anim = "BlackFade"
+	
 	# NOTE: you can hook functions in and wait
 	if CURR_MAIN_SCENE != null:
 		Verho._curr_scene = CURR_MAIN_SCENE

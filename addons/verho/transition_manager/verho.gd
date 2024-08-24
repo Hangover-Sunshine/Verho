@@ -6,7 +6,7 @@ signal load_new_scene(scene_name:String)
 ## Emitted once a scene is loaded and about to be added to the SceneTree.
 signal loaded_scene(scene_name:String)
 ## Emitted once a scene is added to the SceneTree.
-signal added_to_scene(scene_name:String)
+signal added_scene(scene_name:String)
 ## Signal emitted when a transition has finished "going in" -- i.e., the screen is visible.
 signal faded_in
 ## Signal emitted when a transition has finished "going out" -- i.e., the screen is obscured.
@@ -14,9 +14,10 @@ signal faded_out
 
 var print_optional_errors:bool = true
 var scene_folder_path:String = ""
+var default_library:String = ""
+var default_anim:String = ""
 
 var _current_transition:BaseTransition
-var _default_transition:Array[String] = [ "" ]
 
 ## Reference the main scene that everything is contained in, as specified in the
 ## Project/Project Settings under General/Application/Run.MainScene.
@@ -26,7 +27,6 @@ var _scene_path:String
 var _scene_name:String
 
 var _transitions:Dictionary = {}
-var _trans_hashcode:int
 
 var _curr_scene:Node
 
@@ -62,9 +62,6 @@ func _ready():
 	for bank in banks:
 		_add_bank(bank)
 	##
-	
-	# Grab a ref to the 0th entry -- this might be overridden, but that's on the end user
-	_default_transition.append(_transitions[""]["transitions"].keys()[0])
 ##
 
 func _process(_delta):
@@ -219,12 +216,24 @@ func _remove_bank(bank:TransitionBank):
 ##
 
 func _select_transition(library:String, transition_name:String) -> PackedScene:
-	var default = _transitions[_default_transition[0]]["transitions"][_default_transition[1]]["scene"]
+	var default = null
+	
+	if default_library in _transitions.keys():
+		if default_anim in _transitions[default_library]["transitions"].keys():
+			default = _transitions[default_library]["transitions"][default_anim]["scene"]
+		else:
+			printerr("The animation \"%s\" does not exist!" % default_anim)
+			var zeroth = _transitions[default_library]["transitions"].keys()[0]
+			default = _transitions[default_library]["transitions"][zeroth]["scene"]
+		##
+	else:
+		printerr("The default library \"%s\" does not exist!" % default_library)
+	##
 	
 	# does the library exist?
 	if _transitions.has(library) == false:
 		if print_optional_errors:
-			printerr("Library %s does not exist!" % library)
+			printerr("Library \"%s\" does not exist!" % library)
 		##
 		return default
 	##
@@ -233,7 +242,7 @@ func _select_transition(library:String, transition_name:String) -> PackedScene:
 	if _transitions[library]["transitions"].has(transition_name) == false or\
 		_transitions[library]["transitions"][transition_name] == null:
 		if print_optional_errors:
-			printerr("Transition %s does not exist in library %s!" % [transition_name, library])
+			printerr("Transition \"%s\" does not exist in library \"%s\"!" % [transition_name, library])
 		##
 		return default
 	##
