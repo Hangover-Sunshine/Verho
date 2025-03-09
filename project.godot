@@ -8,21 +8,25 @@
 
 config_version=5
 
+[Application]
+
+Verho/General=0
+Verho/Transitions=[]
+
+[Verho]
+
+Transitions=[]
+General=0
+General/General=0
+General/Transitions=[]
+Scenes/Scenes=[]
+
 [application]
 
 config/name="Verho"
-run/main_scene="res://scenes/MainScene.tscn"
-config/features=PackedStringArray("4.2", "Forward Plus")
+config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 config/icon="res://addons/verho/resources/curtains-white.svg"
-
-[autoload]
-
-Verho="*res://addons/verho/transition_manager/verho.tscn"
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/verho/plugin.cfg")
 
 [rendering]
 

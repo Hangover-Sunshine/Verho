@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="TransitionResource" load_steps=3 format=3 uid="uid://c6vwsjt3ok8vf"]
 
-[ext_resource type="Script" path="res://addons/verho/resources/TransitionResource.gd" id="1_eeure"]
+[ext_resource type="Script" uid="uid://bcc04rbgb8wk2" path="res://addons/verho/resources/TransitionResource.gd" id="1_eeure"]
 [ext_resource type="PackedScene" uid="uid://bxbk1gfxxe2sq" path="res://prefabs/transitions/Fade_ProgressBar_P2C.tscn" id="1_hsnfw"]
 
 [resource]

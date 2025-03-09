@@ -17,7 +17,7 @@ var scene_folder_path:String = ""
 var default_library:String = ""
 var default_anim:String = ""
 
-var _current_transition:BaseTransition
+var _current_transition
 
 ## Reference the main scene that everything is contained in, as specified in the
 ## Project/Project Settings under General/Application/Run.MainScene.
@@ -38,8 +38,6 @@ func _init():
 
 func _ready():
 	var root = get_tree().root.get_tree()
-	root.node_added.connect(_on_node_added)
-	root.node_removed.connect(_on_node_removed)
 	
 	# Hang on to the reference of _main_scene
 	_main_scene = root.current_scene
@@ -57,10 +55,6 @@ func _ready():
 	
 	for node in get_tree().root.get_children():
 		banks.append_array(node.find_children("*", "TransitionBank"))
-	##
-	
-	for bank in banks:
-		_add_bank(bank)
 	##
 ##
 
@@ -114,7 +108,7 @@ func _process(_delta):
 			
 			# play the animation player and make sure it knows we're fading in
 			# only do this AFTER add_child is done, never before!
-			_current_transition.play(BaseTransition.PLAY_DIRECTION.IN)
+			#_current_transition.play(BaseTransition.PLAY_DIRECTION.IN)
 			
 			# stop from coming back here
 			set_process(false)
@@ -125,7 +119,7 @@ func _process(_delta):
 func _load_new_scene(scene:String, library:String, transition:String):
 	_current_transition = _select_transition(library, transition).instantiate()
 	add_child(_current_transition)
-	_current_transition.play(BaseTransition.PLAY_DIRECTION.OUT)
+	#_current_transition.play(BaseTransition.PLAY_DIRECTION.OUT)
 	
 	if scene_folder_path != "":
 		_scene_path = "res://" + scene_folder_path + scene + ".tscn"
@@ -151,68 +145,6 @@ func _load_new_scene(scene:String, library:String, transition:String):
 	
 	# Turn on the process function now that everything is set-up!
 	set_process(true)
-##
-
-func _on_node_added(node):
-	if node is TransitionBank:
-		_add_bank(node)
-	##
-##
-
-func _on_node_removed(node):
-	if not node is TransitionBank:
-		return
-	##
-	
-	_remove_bank(node)
-##
-
-func _add_bank(bank:TransitionBank):
-	if _transitions.has(bank.BANK_NAME) and bank.BANK_NAME != "":
-		_transitions[bank.label]['count'] += 1
-		return
-	elif _transitions.has(bank.BANK_NAME) and bank.BANK_NAME == "":
-		if print_optional_errors:
-			printerr("Global transition list is already defined!")
-		##
-		return
-	##
-	
-	# Don't add the bank if there's nothing there, that will make things sad :(
-	if bank.TRANSITIONS.size() == 0:
-		return
-	##
-	
-	_transitions[bank.BANK_NAME] = {
-		"name": bank.BANK_NAME,
-		"transitions": _create_internal_trans_reps(bank.TRANSITIONS),
-		"count": 1
-	}
-##
-
-func _create_internal_trans_reps(trans:Array[TransitionResource]) -> Dictionary:
-	var res = {}
-	
-	for t in trans:
-		res[t.TRANSITION_NAME] = {
-			"scene":t.TRANSITION_SCENE
-		}
-	##
-	
-	return res
-##
-
-func _remove_bank(bank:TransitionBank):
-	if _transitions.has(bank.BANK_NAME) == false:
-		return
-	##
-	
-	if _transitions[bank.BANK_NAME]["count"] == 1:
-		_transitions.erase(bank.BANK_NAME)
-		return
-	##
-	
-	_transitions[bank.BANK_NAME]["count"] = _transitions[bank.BANK_NAME]["count"] - 1
 ##
 
 func _select_transition(library:String, transition_name:String) -> PackedScene:
@@ -272,7 +204,7 @@ func _initialize_resource_loader():
 func change_scene(new_scene:String, library:String, transition:String, speed:float = 1.0):
 	_current_transition = _select_transition(library, transition).instantiate()
 	add_child(_current_transition)
-	_current_transition.play(BaseTransition.PLAY_DIRECTION.OUT)
+	#_current_transition.play(BaseTransition.PLAY_DIRECTION.OUT)
 	
 	if scene_folder_path != "":
 		_scene_path = "res://" + scene_folder_path + new_scene + ".tscn"

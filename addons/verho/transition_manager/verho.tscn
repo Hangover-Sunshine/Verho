@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cjmb2vfx816qv"]
 
-[ext_resource type="Script" path="res://addons/verho/transition_manager/verho.gd" id="1_h25f0"]
+[ext_resource type="Script" uid="uid://hxmm2k8u0tfl" path="res://addons/verho/transition_manager/verho.gd" id="1_h25f0"]
 
 [node name="Verho" type="Control"]
 z_index = 4096

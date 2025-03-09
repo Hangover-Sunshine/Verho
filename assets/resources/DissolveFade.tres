@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="TransitionResource" load_steps=3 format=3 uid="uid://600y11mweoc3"]
 
 [ext_resource type="PackedScene" uid="uid://vr71p3ld6ht6" path="res://prefabs/transitions/DissolveTransition.tscn" id="1_1elth"]
-[ext_resource type="Script" path="res://addons/verho/resources/TransitionResource.gd" id="1_m81gp"]
+[ext_resource type="Script" uid="uid://bcc04rbgb8wk2" path="res://addons/verho/resources/TransitionResource.gd" id="1_m81gp"]
 
 [resource]
 script = ExtResource("1_m81gp")
