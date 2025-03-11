@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://fi120wy4xt4v"]
+[gd_scene load_steps=5 format=3 uid="uid://fi120wy4xt4v"]
 
 [ext_resource type="Script" uid="uid://cojdy23jtklpr" path="res://addons/verho/scripts/scenes_controller.gd" id="1_bp5ux"]
 [ext_resource type="Theme" uid="uid://c8dy8looh26ft" path="res://addons/verho/resources/themes/normal_theme.tres" id="1_f3ibu"]
 [ext_resource type="Script" uid="uid://bf2hararh3vsc" path="res://addons/verho/scripts/scene_nicknames.gd" id="2_oiey6"]
+[ext_resource type="Script" uid="uid://bttrrhkircn1g" path="res://addons/verho/scripts/scene_path.gd" id="4_rhget"]
 
 [node name="Menu" type="MarginContainer"]
 anchors_preset = 15
@@ -41,6 +42,7 @@ placeholder_text = "sample_nickname"
 
 [node name="ScenePath" type="VBoxContainer" parent="Layout/ScenesContainer/HBox"]
 layout_mode = 2
+script = ExtResource("4_rhget")
 
 [node name="PathLabel" type="Label" parent="Layout/ScenesContainer/HBox/ScenePath"]
 layout_mode = 2
