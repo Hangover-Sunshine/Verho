@@ -7,7 +7,7 @@ var menu:MarginContainer
 func _enter_tree():
 	add_autoload_singleton("Verho", "transition_manager/verho.tscn")
 	menu = MENU.instantiate()
-	menu.name = "Verho Manager"
+	menu.name = "Verho"
 	EditorInterface.get_editor_main_screen().add_child(menu)
 	_make_visible(false)
 ##
@@ -30,7 +30,7 @@ func _make_visible(visible):
 ##
 
 func _get_plugin_name():
-	return "Verho Manager"
+	return "Verho"
 ##
 
 func _get_plugin_icon():

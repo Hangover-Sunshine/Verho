@@ -6,8 +6,8 @@ extends ScrollContainer
 @onready var add_below = $HBox/AddBelow
 @onready var delete = $HBox/Delete
 
-var nickname:TextEdit
-var location:TextEdit
+var nickname:LineEdit
+var location:LineEdit
 var add_button:Button
 var delete_button:Button
 
@@ -36,7 +36,7 @@ func _ready():
 func _on_add_below_pressed(button:Button):
 	var add_below_index:int = add_below.get_children().find(button)
 	
-	var nickbox:TextEdit = nickname.duplicate(0)
+	var nickbox:LineEdit = nickname.duplicate(0)
 	nickbox.text = ""
 	nickbox.placeholder_text = nickname.placeholder_text
 	scene_nickname.get_child(add_below_index).add_sibling(nickbox)

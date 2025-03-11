@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://fi120wy4xt4v"]
+[gd_scene load_steps=4 format=3 uid="uid://fi120wy4xt4v"]
 
 [ext_resource type="Script" uid="uid://cojdy23jtklpr" path="res://addons/verho/scripts/scenes_controller.gd" id="1_bp5ux"]
+[ext_resource type="Theme" uid="uid://c8dy8looh26ft" path="res://addons/verho/resources/themes/normal_theme.tres" id="1_f3ibu"]
 [ext_resource type="Script" uid="uid://bf2hararh3vsc" path="res://addons/verho/scripts/scene_nicknames.gd" id="2_oiey6"]
 
 [node name="Menu" type="MarginContainer"]
@@ -11,6 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("1_f3ibu")
 
 [node name="Layout" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -32,13 +34,10 @@ layout_mode = 2
 text = "SCENE NICKNAME"
 horizontal_alignment = 1
 
-[node name="Nickname" type="TextEdit" parent="Layout/ScenesContainer/HBox/SceneNickname"]
-custom_minimum_size = Vector2(200, 0)
+[node name="Nickname" type="LineEdit" parent="Layout/ScenesContainer/HBox/SceneNickname"]
+custom_minimum_size = Vector2(200, 35)
 layout_mode = 2
 placeholder_text = "sample_nickname"
-emoji_menu_enabled = false
-scroll_fit_content_height = true
-caret_blink = true
 
 [node name="ScenePath" type="VBoxContainer" parent="Layout/ScenesContainer/HBox"]
 layout_mode = 2
@@ -48,12 +47,11 @@ layout_mode = 2
 text = "SCENE PATH"
 horizontal_alignment = 1
 
-[node name="Location" type="TextEdit" parent="Layout/ScenesContainer/HBox/ScenePath"]
-custom_minimum_size = Vector2(200, 0)
+[node name="Location" type="LineEdit" parent="Layout/ScenesContainer/HBox/ScenePath"]
+custom_minimum_size = Vector2(200, 35)
 layout_mode = 2
 placeholder_text = "path/to/your/scene"
-emoji_menu_enabled = false
-scroll_fit_content_height = true
+caret_blink = true
 
 [node name="AddBelow" type="VBoxContainer" parent="Layout/ScenesContainer/HBox"]
 layout_mode = 2
