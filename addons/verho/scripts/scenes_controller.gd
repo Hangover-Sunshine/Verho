@@ -17,6 +17,8 @@ func _ready():
 	scene_nickname.register_text_edit($HBox/SceneNickname/Nickname)
 	
 	location = $HBox/ScenePath/Location.duplicate(0)
+	scene_path.register_location_box($HBox/ScenePath/Location)
+	
 	add_button = $HBox/AddBelow/AddButton.duplicate(0)
 	delete_button = $HBox/Delete/DeleteButton.duplicate(0)
 	
@@ -70,7 +72,10 @@ func _delete_pressed(button:Button):
 	
 	scene_nickname.remove_child(nn)
 	scene_nickname.unregister_text_edit(nn)
+	
 	scene_path.remove_child(sp)
+	scene_path.unregister_location_box(delete_button_index)
+	
 	add_below.remove_child(ab)
 	delete.remove_child(button)
 	
