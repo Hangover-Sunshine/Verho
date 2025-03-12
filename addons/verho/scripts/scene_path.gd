@@ -5,7 +5,8 @@ const ERROR_FLATBOX = preload("res://addons/verho/resources/themes/error_flatbox
 const WARNING_FLATBOX = preload("res://addons/verho/resources/themes/warning_box.tres")
 
 const ILLEGAL_SURROUNDING_CHARACTERS = [" ", "/", "\\", "*", "|", "<", ">", ":", "?", "."]
-const ILLEGAL_INTERNAL_CHARACTERS = ["*", "|", "<", ">", ":", "?", "\\"]
+const ILLEGAL_INTERNAL_CHARACTERS = ["*", "|", "<", ">", "?", ":", "@", "%", "\\", "\""]
+const VALID_SCENE_EXTENSIONS = ["tscn", "scn", "res"]
 
 var base_path:String = "res://scenes/"
 var component_base_path:Array[String] = ["res:", "scenes"]
@@ -40,7 +41,6 @@ func _updated_scene_base(new_base:String):
 ##
 
 func _on_text_changed(new_string:String, box:LineEdit):
-	print(">> Entered >>")
 	var id:int = get_children().find(box) - 1
 	
 	# Nothing's changed, don't process
@@ -62,7 +62,6 @@ func _on_text_changed(new_string:String, box:LineEdit):
 ##
 
 func _on_lost_focus(box:LineEdit):
-	print(">> Lost focus >>")
 	var id:int = get_children().find(box) - 1
 	
 	# If we lose focus before someone after user hits enter, make sure we don't duplicate work
@@ -87,10 +86,7 @@ func _process_string(new_string:String, id:int) -> Array:
 	# Returns
 	var processed:String = new_string
 	var warningTheme:StyleBox = null
-	
-	var scn_proceessed:String
-	var res_processed:String
-	var use_scn:bool = false
+	var provides_ending:bool = false
 	
 	if processed.length() > 0:
 		# Sanitize the string before doing anything to it
@@ -136,33 +132,41 @@ func _process_string(new_string:String, id:int) -> Array:
 			
 			# If the latter, then check if .tscn, .scn, or .res exist at the location
 			if split.size() == 1:
-				scn_proceessed = processed + ".scn"
-				res_processed = processed + ".res"
-				processed = processed + ".tscn"
+				provides_ending = false
+			elif split[1] not in VALID_SCENE_EXTENSIONS:
+				provides_ending = false
+				processed = split[0] # remove the scene extension
 			##
 		##
 	##
 	
 	if processed.length() > 0:
 		# If the file does not exist, warn the user!
-		var tscn_check:bool = FileAccess.file_exists(processed)
-		var scn_check:bool = FileAccess.file_exists(scn_proceessed)
-		var res_check:bool = FileAccess.file_exists(res_processed)
 		
-		if tscn_check == false and scn_check == false and res_check == false:
-			push_warning("VERHO//WARNING: Unknown scene! Will be removed on export.")
-			warningTheme = WARNING_FLATBOX
-			processed = processed.substr(0, processed.length() - 5)
-		elif tscn_check:
-			processed = processed.substr(0, processed.length() - 5)
-		elif scn_check:
-			processed = scn_proceessed
+		var exists:bool = false
+		if provides_ending:
+			exists = FileAccess.file_exists(processed)
 		else:
-			processed = res_processed
+			var maybe:String = _does_scene_exist(processed)
+			if maybe.length() > 0:
+				exists = true
+				processed = maybe
+			##
 		##
 		
 		# Remove the base path
 		processed = processed.substr(base_path.length())
+		
+		if exists == false:
+			push_warning("VERHO//WARNING: Unknown scene! Will be removed on export.")
+			warningTheme = WARNING_FLATBOX
+		else:
+			# Split and see if we match our default extension type
+			var split = processed.split(".")
+			if split[1] == "tscn":
+				processed = split[0]
+			##
+		##
 	else:
 		push_warning("VERHO//WARNING: Unknown scene! Will be removed on export.")
 		warningTheme = WARNING_FLATBOX
@@ -172,6 +176,17 @@ func _process_string(new_string:String, id:int) -> Array:
 	scene_paths[id] = processed
 	
 	return [processed, warningTheme]
+##
+
+func _does_scene_exist(scene_path:String):
+	for ext in VALID_SCENE_EXTENSIONS:
+		var result = scene_path + "." + ext
+		if FileAccess.file_exists(result):
+			return result
+		##
+	##
+	
+	return ""
 ##
 
 func _sanitize_string(str:String) -> String:
@@ -197,6 +212,16 @@ func _sanitize_string(str:String) -> String:
 	
 	# Remove all internal white spaces
 	processed = processed.replace(" ", "_")
+	
+	var split = processed.split("://")
+	var temp = split[-1]
+	
+	# Remove all illegal characters
+	for ic in ILLEGAL_INTERNAL_CHARACTERS:
+		temp = temp.replace(ic, "")
+	##
+	
+	processed = "://".join(split)
 	
 	return processed
 ##
