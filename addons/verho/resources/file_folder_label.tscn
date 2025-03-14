@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://b2lj3raif1u5u"]
+
+[ext_resource type="Script" uid="uid://wcjg6jrg2pn6" path="res://addons/verho/editor_scripts/file_folder_label.gd" id="1_wbwm3"]
+
+[node name="FileFolderLabel" type="Label"]
+custom_minimum_size = Vector2(350, 35)
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+text = "example.tscn"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+script = ExtResource("1_wbwm3")
+ValidFormats = null

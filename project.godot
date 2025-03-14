@@ -30,7 +30,7 @@ config/icon="res://addons/verho/resources/curtains-white.svg"
 
 [autoload]
 
-Verho="*res://addons/verho/transition_manager/verho.tscn"
+Verho="*res://addons/verho/verho/verho.tscn"
 
 [editor_plugins]
 

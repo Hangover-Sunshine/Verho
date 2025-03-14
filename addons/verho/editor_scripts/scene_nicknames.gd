@@ -7,9 +7,15 @@ const WARNING_FLATBOX = preload("res://addons/verho/resources/themes/warning_box
 var box_to_name:Dictionary[LineEdit, String] = {}
 var conflicts:Array = []
 
-func register_text_edit(nickbox:LineEdit):
-	box_to_name[nickbox] = ""
+func register_text_edit(nickbox:LineEdit, value:String):
+	box_to_name[nickbox] = value
+	nickbox.text = value
 	nickbox.text_changed.connect(_on_text_changed.bind(nickbox))
+##
+
+func initialize_value(nickbox:LineEdit, value:String):
+	box_to_name[nickbox] = value
+	nickbox.text = value
 ##
 
 func unregister_text_edit(nickbox:LineEdit):

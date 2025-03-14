@@ -1,0 +1,250 @@
+[gd_scene load_steps=9 format=3 uid="uid://fi120wy4xt4v"]
+
+[ext_resource type="Theme" uid="uid://c8dy8looh26ft" path="res://addons/verho/resources/themes/normal_theme.tres" id="1_hlewi"]
+[ext_resource type="Script" uid="uid://ied5m3hwr7xt" path="res://addons/verho/editor_scripts/verho_menu.gd" id="2_ec1kr"]
+[ext_resource type="Script" uid="uid://70r7n8v16e7y" path="res://addons/verho/editor_scripts/general_controller.gd" id="3_ec1kr"]
+[ext_resource type="Script" uid="uid://cojdy23jtklpr" path="res://addons/verho/editor_scripts/scenes_controller.gd" id="3_vdpbv"]
+[ext_resource type="Script" uid="uid://bf2hararh3vsc" path="res://addons/verho/editor_scripts/scene_nicknames.gd" id="4_3rdfj"]
+[ext_resource type="Script" uid="uid://vl36na3lpdqv" path="res://addons/verho/editor_scripts/scene_file_dialog.gd" id="5_3rdfj"]
+[ext_resource type="Script" uid="uid://bttrrhkircn1g" path="res://addons/verho/editor_scripts/scene_path.gd" id="5_dm4am"]
+[ext_resource type="PackedScene" uid="uid://b2lj3raif1u5u" path="res://addons/verho/resources/file_folder_label.tscn" id="7_vdpbv"]
+
+[node name="Menu" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_hlewi")
+script = ExtResource("2_ec1kr")
+
+[node name="Layout" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Spacer2" type="ColorRect" parent="Layout"]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+color = Color(0.211765, 0.239216, 0.290196, 0)
+
+[node name="GeneralContainer" type="VBoxContainer" parent="Layout"]
+layout_mode = 2
+script = ExtResource("3_ec1kr")
+
+[node name="WarningContainer" type="VBoxContainer" parent="Layout/GeneralContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Layout/GeneralContainer/WarningContainer"]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 2
+text = ">> UNSAVED CHANGES PRESENT <<"
+horizontal_alignment = 1
+
+[node name="Spacer" type="ColorRect" parent="Layout/GeneralContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+color = Color(0.211765, 0.239216, 0.290196, 0)
+
+[node name="Label3" type="Label" parent="Layout/GeneralContainer"]
+layout_mode = 2
+text = "Transition & Loading Configuration"
+horizontal_alignment = 1
+
+[node name="ImmediateLoad" type="HBoxContainer" parent="Layout/GeneralContainer"]
+layout_mode = 2
+tooltip_text = "If the button isn't toggled, Verho will delay adding a requested scene to the loading system UTIL AFTER the fade out has completed.
+If the button is toggled, it will be immediately queued into the loading system. However, it will not be added to the Scene Tree until after the fade is completed to prevent noticeable popping."
+
+[node name="Label" type="Label" parent="Layout/GeneralContainer/ImmediateLoad"]
+layout_mode = 2
+text = "Immediate Loading:"
+
+[node name="CheckButton" type="CheckButton" parent="Layout/GeneralContainer/ImmediateLoad"]
+layout_mode = 2
+
+[node name="Spacer2" type="ColorRect" parent="Layout/GeneralContainer/ImmediateLoad"]
+visible = false
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+color = Color(0.211765, 0.239216, 0.290196, 0)
+
+[node name="TransitionMemory" type="VBoxContainer" parent="Layout/GeneralContainer"]
+layout_mode = 2
+
+[node name="QueueSize" type="HBoxContainer" parent="Layout/GeneralContainer/TransitionMemory"]
+layout_mode = 2
+tooltip_text = "If the button isn't toggled, Verho will delay adding a requested scene to the loading system UTIL AFTER the fade out has completed.
+If the button is toggled, it will be immediately queued into the loading system. However, it will not be added to the Scene Tree until after the fade is completed to prevent noticeable popping."
+
+[node name="Label" type="Label" parent="Layout/GeneralContainer/TransitionMemory/QueueSize"]
+layout_mode = 2
+text = "Transition Memory:"
+
+[node name="LineEdit" type="LineEdit" parent="Layout/GeneralContainer/TransitionMemory/QueueSize"]
+layout_mode = 2
+text = "-1"
+
+[node name="Growable" type="HBoxContainer" parent="Layout/GeneralContainer/TransitionMemory"]
+layout_mode = 2
+
+[node name="Spacer2" type="ColorRect" parent="Layout/GeneralContainer/TransitionMemory/Growable"]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+color = Color(0.211765, 0.239216, 0.290196, 0)
+
+[node name="Label2" type="Label" parent="Layout/GeneralContainer/TransitionMemory/Growable"]
+layout_mode = 2
+text = "Allow Growth:"
+
+[node name="CheckButton" type="CheckButton" parent="Layout/GeneralContainer/TransitionMemory/Growable"]
+layout_mode = 2
+
+[node name="Spacer" type="ColorRect" parent="Layout"]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+color = Color(0.211765, 0.239216, 0.290196, 0)
+
+[node name="TabContainer" type="TabContainer" parent="Layout"]
+layout_mode = 2
+size_flags_horizontal = 3
+tab_alignment = 1
+current_tab = 1
+all_tabs_in_front = true
+use_hidden_tabs_for_min_size = true
+
+[node name="Scenes" type="ScrollContainer" parent="Layout/TabContainer"]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+script = ExtResource("3_vdpbv")
+metadata/_tab_index = 0
+
+[node name="SceneFileDialog" type="FileDialog" parent="Layout/TabContainer/Scenes"]
+title = "Open a File"
+initial_position = 1
+ok_button_text = "Open"
+file_mode = 0
+root_subfolder = "res://"
+filters = PackedStringArray("*.tscn", "*.scn", "*.res")
+script = ExtResource("5_3rdfj")
+
+[node name="HBox" type="HBoxContainer" parent="Layout/TabContainer/Scenes"]
+layout_mode = 2
+
+[node name="Spacer" type="ColorRect" parent="Layout/TabContainer/Scenes/HBox"]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+color = Color(0.211765, 0.239216, 0.290196, 0)
+
+[node name="SceneNickname" type="VBoxContainer" parent="Layout/TabContainer/Scenes/HBox"]
+layout_mode = 2
+script = ExtResource("4_3rdfj")
+
+[node name="NicknameLabel" type="Label" parent="Layout/TabContainer/Scenes/HBox/SceneNickname"]
+layout_mode = 2
+text = "SCENE NICKNAME"
+horizontal_alignment = 1
+
+[node name="Nickname" type="LineEdit" parent="Layout/TabContainer/Scenes/HBox/SceneNickname"]
+custom_minimum_size = Vector2(250, 35)
+layout_mode = 2
+placeholder_text = "sample_nickname"
+
+[node name="ScenePath" type="VBoxContainer" parent="Layout/TabContainer/Scenes/HBox"]
+layout_mode = 2
+script = ExtResource("5_dm4am")
+
+[node name="PathLabel" type="Label" parent="Layout/TabContainer/Scenes/HBox/ScenePath"]
+layout_mode = 2
+text = "SCENE PATH"
+horizontal_alignment = 1
+
+[node name="FileFolderLabel" parent="Layout/TabContainer/Scenes/HBox/ScenePath" instance=ExtResource("7_vdpbv")]
+layout_mode = 2
+ValidFormats = PackedStringArray("tscn", "scn", "res")
+
+[node name="AddBelow" type="VBoxContainer" parent="Layout/TabContainer/Scenes/HBox"]
+layout_mode = 2
+
+[node name="PathLabel" type="Label" parent="Layout/TabContainer/Scenes/HBox/AddBelow"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="AddButton" type="Button" parent="Layout/TabContainer/Scenes/HBox/AddBelow"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+text = "Add Below"
+
+[node name="Delete" type="VBoxContainer" parent="Layout/TabContainer/Scenes/HBox"]
+layout_mode = 2
+
+[node name="PathLabel" type="Label" parent="Layout/TabContainer/Scenes/HBox/Delete"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="DeleteButton" type="Button" parent="Layout/TabContainer/Scenes/HBox/Delete"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+disabled = true
+text = "Delete"
+
+[node name="Transitions" type="ScrollContainer" parent="Layout/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="TransitionDialog" type="FileDialog" parent="Layout/TabContainer/Transitions"]
+auto_translate_mode = 1
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+filters = PackedStringArray("tscn", "scn", "res")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Layout/TabContainer/Transitions"]
+layout_mode = 2
+
+[node name="TransNickname" type="VBoxContainer" parent="Layout/TabContainer/Transitions/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Layout/TabContainer/Transitions/HBoxContainer/TransNickname"]
+layout_mode = 2
+text = "Nickname"
+horizontal_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Layout/TabContainer/Transitions/HBoxContainer/TransNickname"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+placeholder_text = "transition_nickname"
+
+[node name="TransLocation" type="VBoxContainer" parent="Layout/TabContainer/Transitions/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Layout/TabContainer/Transitions/HBoxContainer/TransLocation"]
+layout_mode = 2
+text = "Transition Location"
+
+[node name="AddBelow" type="VBoxContainer" parent="Layout/TabContainer/Transitions/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Layout/TabContainer/Transitions/HBoxContainer/AddBelow"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Layout/TabContainer/Transitions/HBoxContainer/AddBelow"]
+layout_mode = 2
+text = "Add Below"
+
+[node name="Delete" type="VBoxContainer" parent="Layout/TabContainer/Transitions/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Layout/TabContainer/Transitions/HBoxContainer/Delete"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Layout/TabContainer/Transitions/HBoxContainer/Delete"]
+layout_mode = 2
+text = "Delete"
+
+[connection signal="canceled" from="Layout/TabContainer/Scenes/SceneFileDialog" to="Layout/TabContainer/Scenes/SceneFileDialog" method="_on_canceled"]
+[connection signal="file_selected" from="Layout/TabContainer/Scenes/SceneFileDialog" to="Layout/TabContainer/Scenes/SceneFileDialog" method="_on_file_selected"]

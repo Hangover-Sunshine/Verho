@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cjmb2vfx816qv"]
 
-[ext_resource type="Script" uid="uid://hxmm2k8u0tfl" path="res://addons/verho/transition_manager/verho.gd" id="1_h25f0"]
+[ext_resource type="Script" uid="uid://hxmm2k8u0tfl" path="res://addons/verho/verho/verho.gd" id="1_h25f0"]
 
 [node name="Verho" type="Control"]
 z_index = 4096
@@ -12,3 +12,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_h25f0")
+
+[node name="TransitionHoldingLayer" type="CanvasLayer" parent="."]
+layer = 128
+follow_viewport_enabled = true

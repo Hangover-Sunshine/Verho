@@ -1,23 +1,26 @@
 @tool
+class_name SceneController
 extends ScrollContainer
 
 @onready var scene_nickname = $HBox/SceneNickname
 @onready var scene_path = $HBox/ScenePath
 @onready var add_below = $HBox/AddBelow
 @onready var delete = $HBox/Delete
+@onready var scene_file_dialog = $SceneFileDialog
 
 var nickname:LineEdit
-var location:LineEdit
+var location:FileFolderLabel
 var add_button:Button
 var delete_button:Button
 
 func _ready():
 	# Store and hide local variants
 	nickname = $HBox/SceneNickname/Nickname.duplicate(0)
-	scene_nickname.register_text_edit($HBox/SceneNickname/Nickname)
+	scene_nickname.register_text_edit($HBox/SceneNickname/Nickname, "")
 	
-	location = $HBox/ScenePath/Location.duplicate(0)
-	scene_path.register_location_box($HBox/ScenePath/Location)
+	location = $HBox/ScenePath/FileFolderLabel.duplicate(4)
+	scene_path.register_location_box($HBox/ScenePath/FileFolderLabel, "")
+	scene_file_dialog.register_file_folder_label($HBox/ScenePath/FileFolderLabel)
 	
 	add_button = $HBox/AddBelow/AddButton.duplicate(0)
 	delete_button = $HBox/Delete/DeleteButton.duplicate(0)
@@ -39,15 +42,14 @@ func _on_add_below_pressed(button:Button):
 	var add_below_index:int = add_below.get_children().find(button)
 	
 	var nickbox:LineEdit = nickname.duplicate(0)
-	nickbox.text = ""
 	nickbox.placeholder_text = nickname.placeholder_text
 	scene_nickname.get_child(add_below_index).add_sibling(nickbox)
-	scene_nickname.register_text_edit(nickbox)
+	scene_nickname.register_text_edit(nickbox, "")
 	
-	var pathbox = location.duplicate(0)
-	pathbox.text = ""
-	pathbox.placeholder_text = location.placeholder_text
+	var pathbox = location.duplicate(4)
 	scene_path.get_child(add_below_index).add_sibling(pathbox)
+	scene_path.register_location_box(pathbox, "")
+	scene_file_dialog.register_file_folder_label(pathbox)
 	
 	var add_btn = add_button.duplicate(0)
 	add_btn.pressed.connect(_on_add_below_pressed.bind(add_btn))
@@ -87,4 +89,63 @@ func _delete_pressed(button:Button):
 	if delete.get_child_count() == 2:
 		delete.get_child(1).disabled = true
 	##
+##
+
+func get_scene_pairs() -> Array:
+	var pairs:Array = []
+	
+	# Just grab them all
+	var nicknames:Array = scene_nickname.box_to_name.values()
+	for index in range(nicknames.size()):
+		var snn:String = nicknames[index]
+		var sp:String = scene_path.scene_paths[index]
+		pairs.append([snn, sp])
+	##
+	
+	return pairs
+##
+
+func load_scene_pairs(data:Array) -> bool:
+	if data.size() > 1:
+		delete.get_child(1).disabled = false
+	##
+	
+#region Nick Name
+	scene_nickname.initialize_value($HBox/SceneNickname/Nickname, data[0][0])
+#endregion
+	
+#region Scene Location
+	scene_path.initialize_value($HBox/ScenePath/FileFolderLabel, 0, data[0][1])
+#endregion
+	
+	for index in range(1, data.size()):
+#region Nick Name
+		var nickbox:LineEdit = nickname.duplicate(0)
+		nickbox.placeholder_text = nickname.placeholder_text
+		scene_nickname.add_child(nickbox)
+		scene_nickname.register_text_edit(nickbox, data[index][0])
+#endregion
+		
+#region Scene Location
+		var pathbox = location.duplicate(4)
+		scene_path.add_child(pathbox)
+		scene_path.register_location_box(pathbox, data[index][1])
+		scene_file_dialog.register_file_folder_label(pathbox)
+#endregion
+		
+#region Add Button
+		var add_btn = add_button.duplicate(0)
+		add_btn.pressed.connect(_on_add_below_pressed.bind(add_btn))
+		add_below.add_child(add_btn)
+#endregion
+		
+#region Delete Button
+		var delete_btn = delete_button.duplicate(0)
+		delete_btn.disabled = false
+		delete_btn.pressed.connect(_delete_pressed.bind(delete_btn))
+		delete.add_child(delete_btn)
+#endregion
+	##
+	
+	return true
 ##
