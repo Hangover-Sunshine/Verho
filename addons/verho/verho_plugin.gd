@@ -1,14 +1,20 @@
 @tool
 extends EditorPlugin
 
-const HR_FILE:String = "res://addons/verho/resources/verho.json"
+const HR_FILE:String = "res://addons/verho/verho/verho.json"
 const EXPORT_FILE:String = "res://addons/verho/verho"
 const MENU = preload("res://addons/verho/resources/menu.tscn")
+const EXPORT_PLUGIN = preload("res://addons/verho/export_plugin.gd")
 
 var menu:VerhoContainer
+var export
+var data:Dictionary
 
 func _enter_tree():
+	export = EXPORT_PLUGIN.new()
+	add_export_plugin(export)
 	add_autoload_singleton("Verho", "verho/verho.tscn")
+	
 	menu = MENU.instantiate()
 	menu.name = "Verho"
 	EditorInterface.get_editor_main_screen().add_child(menu)
@@ -28,7 +34,7 @@ func _enter_tree():
 		menu.set_data(json.data)
 	else:
 		#region Save To Disk
-			_save_to_disk(menu.get_data())
+		_save_to_disk(menu.get_data())
 		#endregion
 	##
 #endregion
@@ -36,6 +42,7 @@ func _enter_tree():
 
 func _exit_tree():
 	remove_autoload_singleton("Verho")
+	remove_export_plugin(export)
 	if menu:
 		menu.queue_free()
 	##
@@ -60,19 +67,13 @@ func _get_plugin_icon():
 ##
 
 func _get_state():
-	var data:Dictionary
-	
 	if menu.has_changed():
 		data = menu.get_data()
-	else:
-		pass
-	##
-	
-	print(data)
-	
 #region Save To Disk
-	_save_to_disk(data)
+		_save_to_disk(data)
 #endregion
+		print(data)
+	##
 	
 	return data
 ##

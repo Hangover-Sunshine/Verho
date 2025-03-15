@@ -1,13 +1,16 @@
-[gd_scene load_steps=9 format=3 uid="uid://fi120wy4xt4v"]
+[gd_scene load_steps=12 format=3 uid="uid://fi120wy4xt4v"]
 
 [ext_resource type="Theme" uid="uid://c8dy8looh26ft" path="res://addons/verho/resources/themes/normal_theme.tres" id="1_hlewi"]
 [ext_resource type="Script" uid="uid://ied5m3hwr7xt" path="res://addons/verho/editor_scripts/verho_menu.gd" id="2_ec1kr"]
 [ext_resource type="Script" uid="uid://70r7n8v16e7y" path="res://addons/verho/editor_scripts/general_controller.gd" id="3_ec1kr"]
 [ext_resource type="Script" uid="uid://cojdy23jtklpr" path="res://addons/verho/editor_scripts/scenes_controller.gd" id="3_vdpbv"]
 [ext_resource type="Script" uid="uid://bf2hararh3vsc" path="res://addons/verho/editor_scripts/scene_nicknames.gd" id="4_3rdfj"]
-[ext_resource type="Script" uid="uid://vl36na3lpdqv" path="res://addons/verho/editor_scripts/scene_file_dialog.gd" id="5_3rdfj"]
+[ext_resource type="Script" uid="uid://vl36na3lpdqv" path="res://addons/verho/editor_scripts/file_dialog.gd" id="5_3rdfj"]
 [ext_resource type="Script" uid="uid://bttrrhkircn1g" path="res://addons/verho/editor_scripts/scene_path.gd" id="5_dm4am"]
 [ext_resource type="PackedScene" uid="uid://b2lj3raif1u5u" path="res://addons/verho/resources/file_folder_label.tscn" id="7_vdpbv"]
+[ext_resource type="Script" uid="uid://cuj2wc26sndoa" path="res://addons/verho/editor_scripts/transitions_controller.gd" id="9_dm4am"]
+[ext_resource type="Script" uid="uid://rnoxqh7i4t76" path="res://addons/verho/editor_scripts/trans_nicknames.gd" id="10_680of"]
+[ext_resource type="Script" uid="uid://cs3p0o2dsghpi" path="res://addons/verho/editor_scripts/trans_location.gd" id="11_n5n52"]
 
 [node name="Menu" type="MarginContainer"]
 anchors_preset = 15
@@ -41,7 +44,7 @@ alignment = 1
 [node name="Label" type="Label" parent="Layout/GeneralContainer/WarningContainer"]
 modulate = Color(1, 0, 0, 1)
 layout_mode = 2
-text = ">> UNSAVED CHANGES PRESENT <<"
+text = "> UNSAVED CHANGES PRESENT <"
 horizontal_alignment = 1
 
 [node name="Spacer" type="ColorRect" parent="Layout/GeneralContainer"]
@@ -86,7 +89,7 @@ text = "Transition Memory:"
 
 [node name="LineEdit" type="LineEdit" parent="Layout/GeneralContainer/TransitionMemory/QueueSize"]
 layout_mode = 2
-text = "-1"
+text = "0"
 
 [node name="Growable" type="HBoxContainer" parent="Layout/GeneralContainer/TransitionMemory"]
 layout_mode = 2
@@ -103,6 +106,57 @@ text = "Allow Growth:"
 [node name="CheckButton" type="CheckButton" parent="Layout/GeneralContainer/TransitionMemory/Growable"]
 layout_mode = 2
 
+[node name="VBoxContainer" type="VBoxContainer" parent="Layout/GeneralContainer/TransitionMemory"]
+layout_mode = 2
+
+[node name="Allow" type="HBoxContainer" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer"]
+layout_mode = 2
+
+[node name="Spacer2" type="ColorRect" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/Allow"]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+color = Color(0.211765, 0.239216, 0.290196, 0)
+
+[node name="Label" type="Label" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/Allow"]
+layout_mode = 2
+text = "Preloading:"
+
+[node name="CheckButton" type="CheckButton" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/Allow"]
+layout_mode = 2
+
+[node name="PreloadedTrans" type="HBoxContainer" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer"]
+layout_mode = 2
+
+[node name="Spacer2" type="ColorRect" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans"]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+color = Color(0.211765, 0.239216, 0.290196, 0)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Slots:"
+
+[node name="LineEdit" type="LineEdit" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "0"
+alignment = 1
+max_length = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans/VBoxContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
 [node name="Spacer" type="ColorRect" parent="Layout"]
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
@@ -112,12 +166,11 @@ color = Color(0.211765, 0.239216, 0.290196, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 tab_alignment = 1
-current_tab = 1
+current_tab = 0
 all_tabs_in_front = true
 use_hidden_tabs_for_min_size = true
 
 [node name="Scenes" type="ScrollContainer" parent="Layout/TabContainer"]
-visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 script = ExtResource("3_vdpbv")
@@ -193,38 +246,50 @@ disabled = true
 text = "Delete"
 
 [node name="Transitions" type="ScrollContainer" parent="Layout/TabContainer"]
+visible = false
 layout_mode = 2
+script = ExtResource("9_dm4am")
 metadata/_tab_index = 1
 
-[node name="TransitionDialog" type="FileDialog" parent="Layout/TabContainer/Transitions"]
-auto_translate_mode = 1
+[node name="TransDialog" type="FileDialog" parent="Layout/TabContainer/Transitions"]
 title = "Open a File"
+initial_position = 1
 ok_button_text = "Open"
 file_mode = 0
-filters = PackedStringArray("tscn", "scn", "res")
+filters = PackedStringArray("*.tscn", "*.scn")
+script = ExtResource("5_3rdfj")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Layout/TabContainer/Transitions"]
 layout_mode = 2
 
 [node name="TransNickname" type="VBoxContainer" parent="Layout/TabContainer/Transitions/HBoxContainer"]
 layout_mode = 2
+script = ExtResource("10_680of")
 
 [node name="Label" type="Label" parent="Layout/TabContainer/Transitions/HBoxContainer/TransNickname"]
 layout_mode = 2
 text = "Nickname"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="LineEdit" type="LineEdit" parent="Layout/TabContainer/Transitions/HBoxContainer/TransNickname"]
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(250, 35)
 layout_mode = 2
 placeholder_text = "transition_nickname"
 
 [node name="TransLocation" type="VBoxContainer" parent="Layout/TabContainer/Transitions/HBoxContainer"]
 layout_mode = 2
+script = ExtResource("11_n5n52")
 
 [node name="Label" type="Label" parent="Layout/TabContainer/Transitions/HBoxContainer/TransLocation"]
 layout_mode = 2
 text = "Transition Location"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FileFolderLabel" parent="Layout/TabContainer/Transitions/HBoxContainer/TransLocation" instance=ExtResource("7_vdpbv")]
+layout_mode = 2
+ValidFormats = PackedStringArray("tscn", "scn", "res")
 
 [node name="AddBelow" type="VBoxContainer" parent="Layout/TabContainer/Transitions/HBoxContainer"]
 layout_mode = 2
@@ -233,6 +298,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Button" type="Button" parent="Layout/TabContainer/Transitions/HBoxContainer/AddBelow"]
+custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 text = "Add Below"
 
@@ -243,8 +309,13 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Button" type="Button" parent="Layout/TabContainer/Transitions/HBoxContainer/Delete"]
+custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
+disabled = true
 text = "Delete"
 
+[connection signal="pressed" from="Layout/GeneralContainer/ImmediateLoad/CheckButton" to="Layout/GeneralContainer" method="_on_check_button_pressed"]
+[connection signal="pressed" from="Layout/GeneralContainer/TransitionMemory/Growable/CheckButton" to="Layout/GeneralContainer" method="_on_check_button_pressed"]
+[connection signal="pressed" from="Layout/GeneralContainer/TransitionMemory/VBoxContainer/Allow/CheckButton" to="Layout/GeneralContainer" method="_on_check_button_pressed"]
 [connection signal="canceled" from="Layout/TabContainer/Scenes/SceneFileDialog" to="Layout/TabContainer/Scenes/SceneFileDialog" method="_on_canceled"]
 [connection signal="file_selected" from="Layout/TabContainer/Scenes/SceneFileDialog" to="Layout/TabContainer/Scenes/SceneFileDialog" method="_on_file_selected"]

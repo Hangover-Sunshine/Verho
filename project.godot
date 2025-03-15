@@ -24,17 +24,11 @@ Scenes/Scenes=[]
 [application]
 
 config/name="Verho"
+config/version="2.0"
+run/main_scene="uid://bxbsbrfxvxs0a"
 config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 config/icon="res://addons/verho/resources/curtains-white.svg"
-
-[autoload]
-
-Verho="*res://addons/verho/verho/verho.tscn"
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/verho/plugin.cfg")
 
 [rendering]
 

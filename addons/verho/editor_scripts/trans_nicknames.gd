@@ -6,22 +6,22 @@ signal edit_occurred
 const ERROR_FLATBOX = preload("res://addons/verho/resources/themes/error_flatbox.tres")
 const WARNING_FLATBOX = preload("res://addons/verho/resources/themes/warning_box.tres")
 
-var box_to_name:Dictionary[LineEdit, String] = {}
+var trans_nicknames:Dictionary[LineEdit, String] = {}
 var conflicts:Array = []
 
+func initialize_value(nickbox:LineEdit, value:String):
+	trans_nicknames[nickbox] = value
+	nickbox.text = value
+##
+
 func register_text_edit(nickbox:LineEdit, value:String):
-	box_to_name[nickbox] = value
+	trans_nicknames[nickbox] = value
 	nickbox.text = value
 	nickbox.text_changed.connect(_on_text_changed.bind(nickbox))
 ##
 
-func initialize_value(nickbox:LineEdit, value:String):
-	box_to_name[nickbox] = value
-	nickbox.text = value
-##
-
 func unregister_text_edit(nickbox:LineEdit):
-	box_to_name.erase(nickbox)
+	trans_nicknames.erase(nickbox)
 	_remove_from_conflicts(nickbox)
 ##
 
@@ -49,8 +49,8 @@ func _on_text_changed(new_string:String, nickbox:LineEdit):
 		##
 	##
 	
-	var prev_name = box_to_name[nickbox]
-	box_to_name[nickbox] = new_name
+	var prev_name = trans_nicknames[nickbox]
+	trans_nicknames[nickbox] = new_name
 	
 	if prev_name != "" and new_name == "":
 		push_warning("VERHO//WARNING: Empty names don't make for good nicknames!")
@@ -65,8 +65,8 @@ func _on_text_changed(new_string:String, nickbox:LineEdit):
 	# Check if we're in any conflicts
 	var conflicting_boxes:Array[LineEdit] = []
 	var preexisting:bool = false
-	for b in box_to_name.keys():
-		if b != nickbox and box_to_name[b] == new_name:
+	for b in trans_nicknames.keys():
+		if b != nickbox and trans_nicknames[b] == new_name:
 			for conflict in conflicts:
 				if b in conflict:
 					exists = conflict

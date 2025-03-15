@@ -2,6 +2,8 @@
 class_name SceneController
 extends ScrollContainer
 
+signal edit_occurred
+
 @onready var scene_nickname = $HBox/SceneNickname
 @onready var scene_path = $HBox/ScenePath
 @onready var add_below = $HBox/AddBelow
@@ -14,6 +16,9 @@ var add_button:Button
 var delete_button:Button
 
 func _ready():
+	scene_nickname.edit_occurred.connect(_edit_occurred)
+	scene_path.edit_occurred.connect(_edit_occurred)
+	
 	# Store and hide local variants
 	nickname = $HBox/SceneNickname/Nickname.duplicate(0)
 	scene_nickname.register_text_edit($HBox/SceneNickname/Nickname, "")
@@ -63,6 +68,8 @@ func _on_add_below_pressed(button:Button):
 	if delete.get_child_count() > 2:
 		delete.get_child(1).disabled = false
 	##
+	
+	_edit_occurred()
 ##
 
 func _delete_pressed(button:Button):
@@ -89,6 +96,12 @@ func _delete_pressed(button:Button):
 	if delete.get_child_count() == 2:
 		delete.get_child(1).disabled = true
 	##
+	
+	_edit_occurred()
+##
+
+func _edit_occurred():
+	edit_occurred.emit()
 ##
 
 func get_scene_pairs() -> Array:
