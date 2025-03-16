@@ -37,6 +37,14 @@ func _init():
 ##
 
 func _ready():
+	if Engine.is_editor_hint() == false:
+		var loader:VerhoLoader = VerhoLoader.new()
+		print(loader.read_data("res://addons/verho/verho/verho.blob"))
+	else:
+		# TODO: Look at JSON file instead
+		pass
+	##
+	
 	var root = get_tree().root.get_tree()
 	
 	# Hang on to the reference of _main_scene

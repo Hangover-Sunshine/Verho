@@ -319,3 +319,4 @@ text = "Delete"
 [connection signal="pressed" from="Layout/GeneralContainer/TransitionMemory/VBoxContainer/Allow/CheckButton" to="Layout/GeneralContainer" method="_on_check_button_pressed"]
 [connection signal="canceled" from="Layout/TabContainer/Scenes/SceneFileDialog" to="Layout/TabContainer/Scenes/SceneFileDialog" method="_on_canceled"]
 [connection signal="file_selected" from="Layout/TabContainer/Scenes/SceneFileDialog" to="Layout/TabContainer/Scenes/SceneFileDialog" method="_on_file_selected"]
+[connection signal="file_selected" from="Layout/TabContainer/Transitions/TransDialog" to="Layout/TabContainer/Transitions/TransDialog" method="_on_file_selected"]

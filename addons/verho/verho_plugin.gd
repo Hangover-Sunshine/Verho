@@ -1,8 +1,7 @@
 @tool
 extends EditorPlugin
 
-const HR_FILE:String = "res://addons/verho/verho/verho.json"
-const EXPORT_FILE:String = "res://addons/verho/verho"
+const HR_FILE:String = "res://addons/verho/resources/verho.json"
 const MENU = preload("res://addons/verho/resources/menu.tscn")
 const EXPORT_PLUGIN = preload("res://addons/verho/export_plugin.gd")
 

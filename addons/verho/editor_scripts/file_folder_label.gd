@@ -12,6 +12,7 @@ func _ready():
 ##
 
 func set_file(file_path:String):
+	print(file_path)
 	var old:String = text
 	text = file_path
 	
