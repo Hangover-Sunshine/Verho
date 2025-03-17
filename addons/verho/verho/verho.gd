@@ -1,5 +1,9 @@
 extends Control
 
+enum ErrorSection {
+	INIT,
+}
+
 ## Emitted when change_scene() is called to inform other potential systems
 ## that the currently active level/scene is about to change.
 signal load_new_scene(scene_name:String)
@@ -11,6 +15,8 @@ signal added_scene(scene_name:String)
 signal faded_in
 ## Signal emitted when a transition has finished "going out" -- i.e., the screen is obscured.
 signal faded_out
+## Emitted when an error occurs, in case the user wants to know what/where it was.
+signal verho_error(errSec:ErrorSection, err:String)
 
 var print_optional_errors:bool = true
 var scene_folder_path:String = ""
@@ -37,12 +43,21 @@ func _init():
 ##
 
 func _ready():
+	var data = null
+	
 	if Engine.is_editor_hint() == false:
 		var loader:VerhoLoader = VerhoLoader.new()
-		print(loader.read_data("res://addons/verho/verho/verho.blob"))
+		data = loader.read_data("res://addons/verho/verho/verho.blob")
+		print(data)
 	else:
-		# TODO: Look at JSON file instead
-		pass
+		var json_loader:VerhoJSONLoader = VerhoJSONLoader.new()
+		data = json_loader.read_file("res://addons/verho/resources/verho.json")
+	##
+	
+	if data == null:
+		verho_error.emit(ErrorSection.INIT, "Unable to load Verho, bailing early.")
+		push_error("VERHO//ERROR: Unable to load Verho, bailing early.")
+		return
 	##
 	
 	var root = get_tree().root.get_tree()
@@ -57,13 +72,6 @@ func _ready():
 	set_process(false)
 	# This will never be turned on
 	set_physics_process(false)
-	
-	# now let's see if we can't find a global transition bank
-	var banks = []
-	
-	for node in get_tree().root.get_children():
-		banks.append_array(node.find_children("*", "TransitionBank"))
-	##
 ##
 
 func _process(_delta):
@@ -208,9 +216,34 @@ func _initialize_resource_loader():
 # PUBLIC METHODS
 # ============================================================
 
-## Call to swap out the underlying scene in Main Scene.
-func change_scene(new_scene:String, library:String, transition:String, speed:float = 1.0):
-	_current_transition = _select_transition(library, transition).instantiate()
+## Call to swap out the underlying scene in Main Scene, assuming using paths.
+func change_scene(scene_path:String, transition:String):
+	if scene_path == "":
+		assert(false, "VERHO//Error: You have provided an empty string for a scene!")
+		return
+	##
+	
+	_current_transition = null
+	add_child(_current_transition)
+	#_current_transition.play(BaseTransition.PLAY_DIRECTION.OUT)
+	
+	if scene_path.contains("res://") == false:
+		scene_path = scene_folder_path + scene_path
+	##
+	
+	_scene_name = scene_path.get_file().split(".")[0]
+	
+	# check if we have to wait until the transition is fully done
+	if _current_transition.ONLY_LOAD_WHEN_FULLY_OUT:
+		return # bail early, don't continue
+	##
+	
+	_initialize_resource_loader()
+##
+
+## Change scene, assuming you are using nicknames for transitions and scenes.
+func change_scenen(new_scene:String, transition:String, speed:float = 1.0):
+	_current_transition = null
 	add_child(_current_transition)
 	#_current_transition.play(BaseTransition.PLAY_DIRECTION.OUT)
 	
