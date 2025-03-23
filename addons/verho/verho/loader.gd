@@ -10,7 +10,7 @@ func read_data(file_path):
 			1:
 				return _read_data_v1(file)
 			_:
-				assert(false, "VERHO//ERROR: Unknown version type detected!")
+				push_error("VERHO//ERROR: Unknown version type detected!")
 			##
 		##
 	##

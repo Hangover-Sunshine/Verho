@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bjyed4vrfnjj5"]
+
+[ext_resource type="Shader" uid="uid://ceb7aykor1b8p" path="res://scripts/shaders/halftone.gdshader" id="1_kafdj"]
+
+[resource]
+shader = ExtResource("1_kafdj")
+shader_parameter/AspectRatio = 2.0
+shader_parameter/Dots = 10.0
+shader_parameter/_min = 0.0
+shader_parameter/_max = 1.0
+shader_parameter/Color = Color(0.24749, 0.0863211, 0.502104, 1)
+shader_parameter/height = -0.5

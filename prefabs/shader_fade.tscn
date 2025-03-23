@@ -1,0 +1,117 @@
+[gd_scene load_steps=8 format=3 uid="uid://ddvpfi3vlk7ls"]
+
+[ext_resource type="Script" uid="uid://b8kfqdds787s3" path="res://scripts/transitions/shader_fade.gd" id="1_p4y67"]
+[ext_resource type="Material" uid="uid://bjyed4vrfnjj5" path="res://scripts/shaders/halftone.tres" id="2_b0nfw"]
+[ext_resource type="Script" uid="uid://dag8w7647ospy" path="res://scripts/transitions/bubbling_effect_param_expose.gd" id="3_b0nfw"]
+
+[sub_resource type="Animation" id="Animation_be1ft"]
+resource_name = "in"
+length = 3.0
+step = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:Height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, -0.5]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"is_finished"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_kvcwc"]
+resource_name = "out"
+length = 3.0
+step = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:Height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.5, 1.0]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"is_finished"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_37dv6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:Height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kvcwc"]
+_data = {
+&"RESET": SubResource("Animation_37dv6"),
+&"in": SubResource("Animation_be1ft"),
+&"out": SubResource("Animation_kvcwc")
+}
+
+[node name="ShaderFade" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_p4y67")
+metadata/_custom_type_script = "uid://wym53414xcc7"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = ExtResource("2_b0nfw")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0, 0.0588235, 1)
+script = ExtResource("3_b0nfw")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_kvcwc")
+}

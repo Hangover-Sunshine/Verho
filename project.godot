@@ -34,6 +34,11 @@ config/icon="res://addons/verho/resources/curtains-white.svg"
 
 Verho="*res://addons/verho/verho/verho.tscn"
 
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/verho/plugin.cfg")

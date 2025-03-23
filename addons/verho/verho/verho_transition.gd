@@ -1,8 +1,12 @@
 class_name VerhoTransition
 extends Control
 
+## Which way the transition is currently going. Either it is obscuring the screen (OUT)
+##	or unobscuring the screen (IN).
 enum Direction {
+	## Loading into gameplay.
 	IN,
+	## Loading out of gameplay.
 	OUT
 }
 
@@ -14,8 +18,7 @@ func play_transition(direction:Direction):
 	pass
 ##
 
-# TODO: What parameters are necessary for this to function?
-func loading_progress():
+func loading_progress(percentage:float):
 	pass
 ##
 
