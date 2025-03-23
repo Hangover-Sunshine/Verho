@@ -60,6 +60,7 @@ func _init():
 func _ready():
 	var data = null
 	
+	# First, check if we're in the engine still
 	if FileAccess.file_exists("res://addons/verho/resources/verho.json"):
 		if FileAccess.file_exists("res://addons/verho/verho/verho.blob"):
 			if FileAccess.get_modified_time("res://addons/verho/resources/verho.json") >\
@@ -74,7 +75,12 @@ func _ready():
 			var json_loader:VerhoJSONLoader = VerhoJSONLoader.new()
 			data = json_loader.read_file("res://addons/verho/resources/verho.json")
 		##
+	# Otherwise, check if we're in the standalone
+	elif FileAccess.file_exists("res://addons/verho/verho/verho.blob"):
+		var loader:VerhoLoader = VerhoLoader.new()
+		data = loader.read_data("res://addons/verho/verho/verho.blob")
 	##
+	# If neither above condition is true, then... Fail. Loudly.
 	
 	#print(">> Finished parsing!")
 	#print(data)
