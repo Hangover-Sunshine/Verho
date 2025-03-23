@@ -22,7 +22,7 @@ signal verho_error(errSec:ErrorSection, err:String)
 
 ## Reference the main scene that everything is contained in, as specified in the
 ## Project/Project Settings under General/Application/Run.MainScene.
-var _main_scene
+var _parent_scene
 
 #region Scenes
 ## Scene Nickname -> Scene Path
@@ -109,8 +109,8 @@ func _ready():
 	
 	var root = get_tree().root.get_tree()
 	
-	# Hang on to the reference of _main_scene
-	_main_scene = root.current_scene
+	# Hang on to the reference of _parent_scene
+	_parent_scene = root.current_scene
 	
 	connect("load_new_scene", _load_new_scene)
 	connect("faded_out", _initialize_resource_loader)
@@ -153,7 +153,7 @@ func _process(_delta):
 		
 		# the new scene is our current scene, we don't care what happens with the other one
 		_curr_scene = new_scene
-		_main_scene.add_child(new_scene)
+		_parent_scene.add_child(new_scene)
 		
 		# we've added the scene to the child
 		emit_signal("added_scene", new_scene)
@@ -330,4 +330,17 @@ func change_nscene_ntrans(new_scene:String, transition:String = "") -> bool:
 	##
 	
 	return change_scene(_scene_library[new_scene], trans)
+##
+
+## Sets the parent node Verho should add loaded scenes. NULL sets it to the base main scene. Only
+##	set this if you want Verho to load to your not-main scene, such as instancing sub-zones or
+##	combat scenes or the like.
+func set_loaded_scene_parent(node:Node = null):
+	if node == null:
+		_parent_scene = get_tree().root.get_tree().current_scene
+	elif node.is_inside_tree():
+		_parent_scene = node
+	else:
+		push_error("VERHO//Error: Unable to use the provided node %s as it is not part of the scene tree!" % node.name)
+	##
 ##
