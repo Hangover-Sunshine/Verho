@@ -45,7 +45,7 @@ var _trans_library:Dictionary[String, String] = {}
 var _trans_path:String
 
 ## The current transition being used
-var _current_transition
+var _current_transition:VerhoTransition
 
 var _load_after_fade_out:bool = false
 var _fade_out_complete:bool = false
@@ -61,30 +61,13 @@ func _ready():
 	var data = null
 	
 	# First, check if we're in the engine still
-	if FileAccess.file_exists("res://addons/verho/resources/verho.json"):
-		if FileAccess.file_exists("res://addons/verho/verho/verho.blob"):
-			if FileAccess.get_modified_time("res://addons/verho/resources/verho.json") >\
-				FileAccess.get_modified_time("res://addons/verho/verho/verho.blob"):
-				var json_loader:VerhoJSONLoader = VerhoJSONLoader.new()
-				data = json_loader.read_file("res://addons/verho/resources/verho.json")
-			else:
-				var loader:VerhoLoader = VerhoLoader.new()
-				data = loader.read_data("res://addons/verho/verho/verho.blob")
-			##
-		else:
-			var json_loader:VerhoJSONLoader = VerhoJSONLoader.new()
-			data = json_loader.read_file("res://addons/verho/resources/verho.json")
-		##
-	# Otherwise, check if we're in the standalone
-	elif FileAccess.file_exists("res://addons/verho/verho/verho.blob"):
-		var loader:VerhoLoader = VerhoLoader.new()
+	var loader:VerhoLoader = VerhoLoader.new()
+	if OS.has_feature("editor"):
+		data = loader.read_data("res://addons/verho/resources/verho.json")
+	else:
 		data = loader.read_data("res://addons/verho/verho/verho.blob")
 	##
 	# If neither above condition is true, then... Fail. Loudly.
-	
-	#print(">> Finished parsing!")
-	#print(data)
-	#print("^^ Results ^^")
 	
 	if data == null:
 		verho_error.emit(ErrorSection.INIT, "Unable to load Verho settings, bailing early.")
@@ -222,6 +205,13 @@ func _initialize_and_fire_transition() -> bool:
 	if resource == null:
 		push_error("VERHO//Error: Resource was unable to be loaded!")
 		return false
+	##
+	
+	# If it's not null yet, tell the last one to free itself quietly!
+	if _current_transition != null:
+		_current_transition.finished_transition.disconnect(_finished_transition)
+		# TODO: Not just queue free - need to capture and ignore
+		_current_transition.free_on_finished()
 	##
 	
 	_current_transition = resource.instantiate()

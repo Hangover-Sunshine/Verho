@@ -34,6 +34,10 @@ config/icon="res://addons/verho/resources/curtains-white.svg"
 
 Verho="*res://addons/verho/verho/verho.tscn"
 
+[debug]
+
+file_logging/enable_file_logging=true
+
 [display]
 
 window/size/viewport_width=1280

@@ -13,6 +13,7 @@ enum Direction {
 signal finished_transition(direction:Direction)
 
 var _direction:Direction
+var _free_on_finished:bool = false
 
 func play_transition(direction:Direction):
 	pass
@@ -22,6 +23,14 @@ func loading_progress(percentage:float):
 	pass
 ##
 
+func free_on_finished():
+	_free_on_finished = true
+##
+
 func is_finished():
+	if _free_on_finished:
+		queue_free()
+		return
+	##
 	finished_transition.emit(_direction)
 ##
