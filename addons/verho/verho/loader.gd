@@ -29,9 +29,9 @@ func _read_data_v1(file) -> Dictionary:
 	
 	# bools
 	var bools:int = file.get_8()
-	results["grow"] = bools & (1 << 2)
-	results["immediate"] = bools & (1 << 1)
-	results["preload"] = bools & 1
+	results["keep_preloads"] = bools & (1 << 2)
+	results["grow"] = bools & (1 << 1)
+	results["immediate"] = bools & 1
 	
 	# size of memory for transitions (number of transitions)
 	results["mem_size"] = file.get_32()
@@ -92,9 +92,8 @@ func _read_json_data(file) -> Dictionary:
 func _read_json_data_v1(data) -> Dictionary:
 	var results = {}
 	
-	results["grow"] = data["general"]["allow_growth"]
+	results["keep_preloads"] = data["general"]["keep_preloads"]
 	results["immediate"] = data["general"]["load_immediately"]
-	results["preload"] = data["general"]["preload"]
 	results["mem_size"] = data["general"]["queue_size"]
 	
 	results["scenes"] = {}

@@ -74,9 +74,9 @@ func _save_to_binary_v1(data, blob):
 	
 	# Push as a blob as:
 	#	1) Stuff bools into a single byte
-	var bools:int = (int(data["general"]["allow_growth"]) << 2) | \
-					(int(data["general"]["load_immediately"]) << 1) | \
-					(int(data["general"]["preload"]))
+	var bools:int = (int(data["general"]["only_preloads"]) << 2) |\
+					(int(data["general"]["allow_growth"]) << 1) | \
+					(int(data["general"]["load_immediately"]))
 	blob.store_8(bools)
 	
 	#	2) Queue size should be stored as 4 bytes, but can likely go lower
@@ -86,20 +86,19 @@ func _save_to_binary_v1(data, blob):
 	#		strings
 	blob.store_8(cleanedData[0].size())
 	
-	#	4) Convert each string to a series of bytes. To pack tightly, prepend with 4 bytes of
-	#		string length.
+	#	4) Convert each string to a series of bytes.
 	for nn in cleanedData[0]:
 		blob.store_pascal_string(nn)
 	##
 	
-	#	5) Add the list
+	#	5) Add the scene list
 	blob.store_32(cleanedData[1].keys().size())
 	for nn in cleanedData[1].keys():
 		blob.store_pascal_string(nn)
 		blob.store_pascal_string(cleanedData[1][nn])
 	##
 	
-	#	6) Add the list
+	#	6) Add the transition list
 	blob.store_32(cleanedData[2].keys().size())
 	for nn in cleanedData[2].keys():
 		blob.store_pascal_string(nn)

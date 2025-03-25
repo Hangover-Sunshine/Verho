@@ -6,16 +6,13 @@ enum ErrorSection {
 	ON_SCENE_CHANGE,
 }
 
-## Emitted when change_scene() is called to inform other potential systems
-## that the currently active level/scene is about to change.
-signal load_new_scene(scene_node)
 ## Emitted once a scene is loaded and about to be added to the SceneTree.
 signal loaded_scene(scene_node)
 ## Emitted once a scene is added to the SceneTree.
 signal added_scene(scene_node)
-## Signal emitted when a transition has finished "going in" -- i.e., the screen is visible.
+## Emitted when a transition has finished "going in" -- i.e., the screen is visible.
 signal faded_in
-## Signal emitted when a transition has finished "going out" -- i.e., the screen is obscured.
+## Emitted when a transition has finished "going out" -- i.e., the screen is obscured.
 signal faded_out
 ## Emitted when an error occurs, in case the user wants to know what/where it was.
 signal verho_error(errSec:ErrorSection, err:String)
@@ -41,8 +38,9 @@ var _curr_scene:Node
 ## Transition Nickname -> Transition Path
 var _trans_library:Dictionary[String, String] = {}
 
-## Holder for the path to the transition we've been requested to use.
-var _trans_path:String
+## Transition Path -> VerhoTransition object
+var _memory:VerhoMemory = null
+var _keep_preloads_in_memory:bool = false
 
 ## The current transition being used
 var _current_transition:VerhoTransition
@@ -60,14 +58,13 @@ func _init():
 func _ready():
 	var data = null
 	
-	# First, check if we're in the engine still
+	# First, check if we're in the engine still or in a standalone release
 	var loader:VerhoLoader = VerhoLoader.new()
 	if OS.has_feature("editor"):
 		data = loader.read_data("res://addons/verho/resources/verho.json")
 	else:
 		data = loader.read_data("res://addons/verho/verho/verho.blob")
 	##
-	# If neither above condition is true, then... Fail. Loudly.
 	
 	if data == null:
 		verho_error.emit(ErrorSection.INIT, "Unable to load Verho settings, bailing early.")
@@ -76,11 +73,7 @@ func _ready():
 	##
 	
 	_load_after_fade_out = !data["immediate"]
-	
-	# Preload the transitions into memory... Not part of the scene, just in memory ready to go.
-	if data["preload"]:
-		pass
-	##
+	_keep_preloads_in_memory = data["keep_preloads"]
 	
 	for key in data["scenes"].keys():
 		_scene_library[key] = data["scenes"][key]
@@ -90,13 +83,18 @@ func _ready():
 		_trans_library[key] = data["trans"][key]
 	##
 	
+	if data["preload_trans"].size() > 0 or data["mem_size"] > 0:
+		_memory = VerhoMemory.new()
+		_memory.initialize(data["mem_size"],
+							data["keep_preloads"], data["preload_trans"],
+							_finished_transition,
+							_trans_library)
+	##
+	
 	var root = get_tree().root.get_tree()
 	
 	# Hang on to the reference of _parent_scene
 	_parent_scene = root.current_scene
-	
-	connect("load_new_scene", _load_new_scene)
-	connect("faded_out", _initialize_resource_loader)
 	
 	# This will be turned on and off at-will when scenes need to be loaded
 	set_process(false)
@@ -122,6 +120,8 @@ func _process(_delta):
 	_current_transition.loading_progress(progress)
 	
 	if progress >= 1 and _fade_out_complete:
+		_fade_out_complete = false
+		
 		# get the new scene from the resource loader and instantiate it
 		var new_scene = ResourceLoader.load_threaded_get(_scene_path).instantiate()
 		
@@ -161,23 +161,13 @@ func _finished_transition(direction:VerhoTransition.Direction):
 		##
 	else:
 		faded_in.emit()
-		# TODO: replace queue free
-		_current_transition.queue_free()
+		if _current_transition.InMemory == false:
+			_current_transition.queue_free()
+		else:
+			transition_layer.remove_child(_current_transition)
+		##
+		_current_transition = null
 	##
-##
-
-func _load_new_scene(scene:String, library:String, transition:String):
-	# async loading initialization...
-	var error = ResourceLoader.load_threaded_request(_scene_path)
-	
-	# if there's an error, break out and report -- DO NOT CONTINUE!
-	if error:
-		push_error("Unable to load scene as a request: %s!" % _scene_path)
-		return
-	##
-	
-	# Turn on the process function now that everything is set-up!
-	set_process(true)
 ##
 
 func _initialize_resource_loader() -> bool:
@@ -196,29 +186,39 @@ func _initialize_resource_loader() -> bool:
 	return true
 ##
 
-func _initialize_and_fire_transition() -> bool:
+func _initialize_and_fire_transition(transition:String) -> bool:
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	
-	# Transitions should always be lightweight and no more than a few KB at max
-	var resource:Resource = load(_trans_path)
-	
-	if resource == null:
-		push_error("VERHO//Error: Resource was unable to be loaded!")
-		return false
-	##
 	
 	# If it's not null yet, tell the last one to free itself quietly!
 	if _current_transition != null:
 		_current_transition.finished_transition.disconnect(_finished_transition)
-		# TODO: Not just queue free - need to capture and ignore
 		_current_transition.free_on_finished()
 	##
 	
-	_current_transition = resource.instantiate()
+	_current_transition = _memory.try_get(transition)
+	
+	if _current_transition == null:
+		# Transitions should always be lightweight and no more than a few KB at max
+		var resource:Resource = load(transition)
+		
+		if resource == null:
+			push_error("VERHO//Error: Transition was unable to be loaded!")
+			return false
+		##
+		
+		_current_transition = resource.instantiate()
+		
+		if _memory != null and _memory.MemorySize > 0:
+			_memory.add(transition, _current_transition)
+		##
+		
+		_current_transition.finished_transition.connect(_finished_transition)
+	##
+	
 	transition_layer.add_child(_current_transition)
+	_current_transition.clean_on_finished = false
 	_fade_out_complete = false
 	_current_transition.play_transition(VerhoTransition.Direction.OUT)
-	_current_transition.finished_transition.connect(_finished_transition)
 	
 	return true
 ##
@@ -243,14 +243,12 @@ func change_scene(scene_path:String, transition:String = "") -> bool:
 		return false
 	##
 	
-	## TODO: Verify scene_path
+	## TODO: Verify scene path
 	_scene_path = scene_path
 	
-	## TODO: Verify transition
-	_trans_path = transition
-	
+	## TODO: Verify transition path
 	# Load and fire the transition
-	var res:bool = _initialize_and_fire_transition()
+	var res:bool = _initialize_and_fire_transition(transition)
 	
 	if _load_after_fade_out == false:
 		res = res && _initialize_resource_loader()

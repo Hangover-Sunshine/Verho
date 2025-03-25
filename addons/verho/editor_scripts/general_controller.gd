@@ -5,8 +5,8 @@ extends VBoxContainer
 signal edit_occurred
 
 @onready var queue_size = $TransitionMemory/QueueSize/LineEdit
-@onready var preload_size = $TransitionMemory/VBoxContainer/PreloadedTrans/VBoxContainer/HBoxContainer/LineEdit
-@onready var nicktainer = $TransitionMemory/VBoxContainer/PreloadedTrans/VBoxContainer/ScrollContainer/VBoxContainer
+@onready var preload_size = $PreloadedTrans/VBoxContainer/HBoxContainer/LineEdit
+@onready var nicktainer = $PreloadedTrans/VBoxContainer/ScrollContainer/VBoxContainer
 
 var transition_nicknames:Array = []
 
@@ -129,19 +129,19 @@ func get_data() -> Dictionary:
 	return { 
 		"load_immediately": $ImmediateLoad/CheckButton.button_pressed,
 		"allow_growth": $TransitionMemory/Growable/CheckButton.button_pressed,
-		"preload": $TransitionMemory/VBoxContainer/Allow/CheckButton.button_pressed,
+		"keep_preloads": $TransitionMemory/OnlyPreloads/CheckButton.button_pressed,
 		"preload_size": int(preload_size.text),
 		"queue_size": int(queue_size.text),
-		"preload_trans": filtered_names
+		"preload_trans": filtered_names,
 	}
 ##
 
 func load_data(data:Dictionary) -> bool:
 	var success:bool = true
 	
+	$TransitionMemory/OnlyPreloads/CheckButton.set_pressed_no_signal(data["only_preloads"])
 	$ImmediateLoad/CheckButton.set_pressed_no_signal(data["load_immediately"])
 	$TransitionMemory/Growable/CheckButton.set_pressed_no_signal(data["allow_growth"])
-	$TransitionMemory/VBoxContainer/Allow/CheckButton.set_pressed_no_signal(data["preload"])
 	preload_size.text = str(int(data["preload_size"]))
 	queue_size.text = str(int(data["queue_size"]))
 	transition_nicknames = data["preload_trans"]

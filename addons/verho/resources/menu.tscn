@@ -76,6 +76,7 @@ layout_mode = 2
 color = Color(0.211765, 0.239216, 0.290196, 0)
 
 [node name="TransitionMemory" type="VBoxContainer" parent="Layout/GeneralContainer"]
+visible = false
 layout_mode = 2
 
 [node name="QueueSize" type="HBoxContainer" parent="Layout/GeneralContainer/TransitionMemory"]
@@ -90,6 +91,7 @@ text = "Transition Memory:"
 [node name="LineEdit" type="LineEdit" parent="Layout/GeneralContainer/TransitionMemory/QueueSize"]
 layout_mode = 2
 text = "0"
+alignment = 1
 
 [node name="Growable" type="HBoxContainer" parent="Layout/GeneralContainer/TransitionMemory"]
 layout_mode = 2
@@ -106,53 +108,45 @@ text = "Allow Growth:"
 [node name="CheckButton" type="CheckButton" parent="Layout/GeneralContainer/TransitionMemory/Growable"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Layout/GeneralContainer/TransitionMemory"]
+[node name="OnlyPreloads" type="HBoxContainer" parent="Layout/GeneralContainer/TransitionMemory"]
 layout_mode = 2
 
-[node name="Allow" type="HBoxContainer" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer"]
-layout_mode = 2
-
-[node name="Spacer2" type="ColorRect" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/Allow"]
+[node name="Spacer2" type="ColorRect" parent="Layout/GeneralContainer/TransitionMemory/OnlyPreloads"]
 custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
 color = Color(0.211765, 0.239216, 0.290196, 0)
 
-[node name="Label" type="Label" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/Allow"]
+[node name="Label" type="Label" parent="Layout/GeneralContainer/TransitionMemory/OnlyPreloads"]
 layout_mode = 2
-text = "Preloading:"
+text = "Keep Preloads:"
 
-[node name="CheckButton" type="CheckButton" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/Allow"]
-layout_mode = 2
-
-[node name="PreloadedTrans" type="HBoxContainer" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="Layout/GeneralContainer/TransitionMemory/OnlyPreloads"]
 layout_mode = 2
 
-[node name="Spacer2" type="ColorRect" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans"]
-custom_minimum_size = Vector2(35, 0)
-layout_mode = 2
-color = Color(0.211765, 0.239216, 0.290196, 0)
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans"]
+[node name="PreloadedTrans" type="HBoxContainer" parent="Layout/GeneralContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Layout/GeneralContainer/PreloadedTrans"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans/VBoxContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Layout/GeneralContainer/PreloadedTrans/VBoxContainer"]
 layout_mode = 2
-text = "Slots:"
 
-[node name="LineEdit" type="LineEdit" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Layout/GeneralContainer/PreloadedTrans/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Preloading Slots:     "
+
+[node name="LineEdit" type="LineEdit" parent="Layout/GeneralContainer/PreloadedTrans/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "0"
 alignment = 1
 max_length = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Layout/GeneralContainer/PreloadedTrans/VBoxContainer"]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Layout/GeneralContainer/TransitionMemory/VBoxContainer/PreloadedTrans/VBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Layout/GeneralContainer/PreloadedTrans/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -316,7 +310,7 @@ text = "Delete"
 
 [connection signal="pressed" from="Layout/GeneralContainer/ImmediateLoad/CheckButton" to="Layout/GeneralContainer" method="_on_check_button_pressed"]
 [connection signal="pressed" from="Layout/GeneralContainer/TransitionMemory/Growable/CheckButton" to="Layout/GeneralContainer" method="_on_check_button_pressed"]
-[connection signal="pressed" from="Layout/GeneralContainer/TransitionMemory/VBoxContainer/Allow/CheckButton" to="Layout/GeneralContainer" method="_on_check_button_pressed"]
+[connection signal="pressed" from="Layout/GeneralContainer/TransitionMemory/OnlyPreloads/CheckButton" to="Layout/GeneralContainer" method="_on_check_button_pressed"]
 [connection signal="canceled" from="Layout/TabContainer/Scenes/SceneFileDialog" to="Layout/TabContainer/Scenes/SceneFileDialog" method="_on_canceled"]
 [connection signal="file_selected" from="Layout/TabContainer/Scenes/SceneFileDialog" to="Layout/TabContainer/Scenes/SceneFileDialog" method="_on_file_selected"]
 [connection signal="file_selected" from="Layout/TabContainer/Transitions/TransDialog" to="Layout/TabContainer/Transitions/TransDialog" method="_on_file_selected"]

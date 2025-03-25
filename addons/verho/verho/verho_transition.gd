@@ -12,8 +12,18 @@ enum Direction {
 
 signal finished_transition(direction:Direction)
 
+## A flag for knowing if the transition should be freed or not.
+var _in_memory:bool = false
+var InMemory:bool :
+	set(value):
+		_in_memory = value
+	get:
+		return _in_memory
+	##
+## 
+
 var _direction:Direction
-var _free_on_finished:bool = false
+var clean_on_finished:bool = false
 
 func play_transition(direction:Direction):
 	pass
@@ -24,12 +34,17 @@ func loading_progress(percentage:float):
 ##
 
 func free_on_finished():
-	_free_on_finished = true
+	clean_on_finished = true
 ##
 
 func is_finished():
-	if _free_on_finished:
-		queue_free()
+	if clean_on_finished:
+		if _in_memory == false:
+			queue_free()
+		else:
+			get_parent().remove_child(self)
+			clean_on_finished = false
+		##
 		return
 	##
 	finished_transition.emit(_direction)

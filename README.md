@@ -7,9 +7,9 @@ A simple transition system to load levels in a non-blocking way.
 
 ## A Simple GDScript Example
 
-## What Does Vehro NOT Do?
+## What Does Verho NOT Do?
 
-Verho does not manage your scenes for you. As this is meant to be a generic framework, Verho has no notion of scenes beyond Nodes. Specific signals, such as `scene_added` and `scene_loaded`, can help you prepare for a new scene. You are in charge of saving your own scenes and information. If you so desire, you can wrap your scene requests in another manager of your desire if you wish to preserve some scenes in memory. Verho, itself, forgets what the prior scene was once it has loaded the requested scene.
+Verho does not manage your scenes for you. As this is meant to be a generic framework, Verho has no notion of scenes beyond Nodes. Specific signals, such as `scene_added` and `scene_loaded`, can help you prepare to close your old scene in exchange for a new scene. You are in charge of saving your own scenes and the requisite information. If you so desire, you can wrap your scene requests in another manager of your desire if you wish to preserve some scenes in memory. Verho, itself, forgets what the prior scene was once it has loaded the requested scene.
 
 ## Export Notes
 
