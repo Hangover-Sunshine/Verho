@@ -52,17 +52,14 @@ func get_data() -> Dictionary:
 
 func set_data(data:Dictionary):
 	if general_container.load_data(data["general"]) == false:
-		push_warning("VERHO//WARNING: Error attempting to base information. Please review the 
-						above carefully.")
+		push_warning("VERHO//WARNING: Error attempting to base information. Please review the above carefully.")
 	##
 	
 	if scenes_container.load_scene_pairs(data["scenes"]) == false:
-		push_warning("VERHO//WARNING: Error attempting to load scenes. Please review the 
-						above carefully.")
+		push_warning("VERHO//WARNING: Error attempting to load scenes. Please review the above carefully.")
 	##
 	
 	if transition_container.load_data(data["trans"]) == false:
-		push_warning("VERHO//WARNING: Error attempting to transitions. Please review the 
-						above carefully.")
+		push_warning("VERHO//WARNING: Error attempting to transitions. Please review the above carefully.")
 	##
 ##

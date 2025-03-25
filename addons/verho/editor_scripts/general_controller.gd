@@ -116,42 +116,42 @@ func _on_text_focus_lost(line_edit):
 ##
 
 func get_data() -> Dictionary:
-	var filtered_names:Array = []
+	#var filtered_names:Array = []
 	
-	if int(preload_size.text) < transition_nicknames.size():
-		for i in range(int(preload_size.text)):
-			filtered_names.push_back(transition_nicknames[i])
-		##
-	else:
-		filtered_names = transition_nicknames
+	#if int(preload_size.text) < transition_nicknames.size():
+		#for i in range(int(preload_size.text)):
+			#filtered_names.push_back(transition_nicknames[i])
+		###
+	#else:
+		#filtered_names = transition_nicknames
 	##
 	
 	return { 
 		"load_immediately": $ImmediateLoad/CheckButton.button_pressed,
-		"allow_growth": $TransitionMemory/Growable/CheckButton.button_pressed,
-		"keep_preloads": $TransitionMemory/OnlyPreloads/CheckButton.button_pressed,
-		"preload_size": int(preload_size.text),
-		"queue_size": int(queue_size.text),
-		"preload_trans": filtered_names,
+		#"allow_growth": $TransitionMemory/Growable/CheckButton.button_pressed,
+		#"keep_preloads": $TransitionMemory/OnlyPreloads/CheckButton.button_pressed,
+		#"preload_size": int(preload_size.text),
+		#"queue_size": int(queue_size.text),
+		#"preload_trans": filtered_names,
 	}
 ##
 
 func load_data(data:Dictionary) -> bool:
 	var success:bool = true
 	
-	$TransitionMemory/OnlyPreloads/CheckButton.set_pressed_no_signal(data["only_preloads"])
 	$ImmediateLoad/CheckButton.set_pressed_no_signal(data["load_immediately"])
-	$TransitionMemory/Growable/CheckButton.set_pressed_no_signal(data["allow_growth"])
-	preload_size.text = str(int(data["preload_size"]))
-	queue_size.text = str(int(data["queue_size"]))
-	transition_nicknames = data["preload_trans"]
+	#$TransitionMemory/OnlyPreloads/CheckButton.set_pressed_no_signal(data["only_preloads"])
+	#$TransitionMemory/Growable/CheckButton.set_pressed_no_signal(data["allow_growth"])
+	#preload_size.text = str(int(data["preload_size"]))
+	#queue_size.text = str(int(data["queue_size"]))
+	#transition_nicknames = data["preload_trans"]
 	
-	for i in range(data["preload_size"]):
-		var nle = LineEdit.new()
-		nle.text = transition_nicknames[i]
-		nle.text_submitted.connect(_on_text_submitted.bind(nle))
-		nle.focus_exited.connect(_on_text_focus_lost.bind(nle))
-		nicktainer.add_child(nle)
+	#for i in range(data["preload_size"]):
+		#var nle = LineEdit.new()
+		#nle.text = transition_nicknames[i]
+		#nle.text_submitted.connect(_on_text_submitted.bind(nle))
+		#nle.focus_exited.connect(_on_text_focus_lost.bind(nle))
+		#nicktainer.add_child(nle)
 	##
 	
 	return success

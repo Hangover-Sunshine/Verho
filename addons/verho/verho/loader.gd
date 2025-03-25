@@ -17,8 +17,6 @@ func read_data(file_path:String):
 				##
 			##
 		##
-		
-		
 	##
 	
 	return {}

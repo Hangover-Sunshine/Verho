@@ -162,3 +162,23 @@ func load_scene_pairs(data:Array) -> bool:
 	
 	return true
 ##
+
+func _can_drop_data(_pos, data):
+	if data["type"] != "files":
+		return false
+	##
+	
+	var okay:bool = false
+	for f in data["files"]:
+		if f.get_extension() in ["tscn", "scn", "res"]:
+			okay = true
+			break
+		##
+	##
+	
+	return okay
+##
+
+func _drop_data(_pos, data):
+	print(data)
+##
