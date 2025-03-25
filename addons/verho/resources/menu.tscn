@@ -124,6 +124,7 @@ text = "Keep Preloads:"
 layout_mode = 2
 
 [node name="PreloadedTrans" type="HBoxContainer" parent="Layout/GeneralContainer"]
+visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Layout/GeneralContainer/PreloadedTrans"]
