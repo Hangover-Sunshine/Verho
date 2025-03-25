@@ -1,5 +1,5 @@
 class_name VerhoLoader
-extends Object
+extends RefCounted
 
 func read_data(file_path:String):
 	if FileAccess.file_exists(file_path):
@@ -92,9 +92,9 @@ func _read_json_data(file) -> Dictionary:
 func _read_json_data_v1(data) -> Dictionary:
 	var results = {}
 	
-	results["keep_preloads"] = data["general"]["keep_preloads"]
+	#results["keep_preloads"] = data["general"]["keep_preloads"]
 	results["immediate"] = data["general"]["load_immediately"]
-	results["mem_size"] = data["general"]["queue_size"]
+	#results["mem_size"] = data["general"]["queue_size"]
 	
 	results["scenes"] = {}
 	for pair in data["scenes"]:
@@ -114,12 +114,12 @@ func _read_json_data_v1(data) -> Dictionary:
 		results["trans"][pair[0]] = pair[1]
 	##
 	
-	results["preload_trans"] = []
-	for ptrans in data["general"]["preload_trans"]:
-		if not(ptrans in results["trans"].keys()):
-			continue
-		##
-		results["preload_trans"].push_back(ptrans)
+	#results["preload_trans"] = []
+	#for ptrans in data["general"]["preload_trans"]:
+		#if not(ptrans in results["trans"].keys()):
+			#continue
+		###
+		#results["preload_trans"].push_back(ptrans)
 	##
 	
 	return results

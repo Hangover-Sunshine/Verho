@@ -83,14 +83,6 @@ func _ready():
 		_trans_library[key] = data["trans"][key]
 	##
 	
-	#if data["preload_trans"].size() > 0 or data["mem_size"] > 0:
-		#_memory = VerhoMemory.new()
-		#_memory.initialize(data["mem_size"],
-							#data["keep_preloads"], data["preload_trans"],
-							#_finished_transition,
-							#_trans_library)
-	##
-	
 	var root = get_tree().root.get_tree()
 	
 	# Hang on to the reference of _parent_scene
@@ -210,12 +202,6 @@ func _initialize_and_fire_transition(transition:String) -> bool:
 	return true
 ##
 
-func _properize_scene_path(path:String) -> String:
-	var fixed:String = path
-	
-	return fixed
-##
-
 # ============================================================
 # PUBLIC METHODS
 # ============================================================
@@ -230,10 +216,14 @@ func change_scene(scene_path:String, transition:String = "") -> bool:
 		return false
 	##
 	
-	## TODO: Verify scene path
+	if not("res://" in scene_path):
+		scene_path = "res://" + scene_path
+	##
 	_scene_path = scene_path
 	
-	## TODO: Verify transition path
+	if not("res://" in transition):
+		transition = "res://" + transition
+	##
 	# Load and fire the transition
 	var res:bool = _initialize_and_fire_transition(transition)
 	
