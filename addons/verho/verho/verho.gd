@@ -83,12 +83,12 @@ func _ready():
 		_trans_library[key] = data["trans"][key]
 	##
 	
-	if data["preload_trans"].size() > 0 or data["mem_size"] > 0:
-		_memory = VerhoMemory.new()
-		_memory.initialize(data["mem_size"],
-							data["keep_preloads"], data["preload_trans"],
-							_finished_transition,
-							_trans_library)
+	#if data["preload_trans"].size() > 0 or data["mem_size"] > 0:
+		#_memory = VerhoMemory.new()
+		#_memory.initialize(data["mem_size"],
+							#data["keep_preloads"], data["preload_trans"],
+							#_finished_transition,
+							#_trans_library)
 	##
 	
 	var root = get_tree().root.get_tree()
@@ -161,11 +161,7 @@ func _finished_transition(direction:VerhoTransition.Direction):
 		##
 	else:
 		faded_in.emit()
-		if _current_transition.InMemory == false:
-			_current_transition.queue_free()
-		else:
-			transition_layer.remove_child(_current_transition)
-		##
+		_current_transition.queue_free()
 		_current_transition = null
 	##
 ##
@@ -195,27 +191,18 @@ func _initialize_and_fire_transition(transition:String) -> bool:
 		_current_transition.free_on_finished()
 	##
 	
-	_current_transition = _memory.try_get(transition)
+	# Transitions should always be lightweight and no more than a few KB at max
+	var resource:Resource = load(transition)
 	
-	if _current_transition == null:
-		# Transitions should always be lightweight and no more than a few KB at max
-		var resource:Resource = load(transition)
-		
-		if resource == null:
-			push_error("VERHO//Error: Transition was unable to be loaded!")
-			return false
-		##
-		
-		_current_transition = resource.instantiate()
-		
-		if _memory != null and _memory.MemorySize > 0:
-			_memory.add(transition, _current_transition)
-		##
-		
-		_current_transition.finished_transition.connect(_finished_transition)
+	if resource == null:
+		push_error("VERHO//Error: Transition was unable to be loaded!")
+		return false
 	##
 	
+	_current_transition = resource.instantiate()
+	
 	transition_layer.add_child(_current_transition)
+	_current_transition.finished_transition.connect(_finished_transition)
 	_current_transition.clean_on_finished = false
 	_fade_out_complete = false
 	_current_transition.play_transition(VerhoTransition.Direction.OUT)

@@ -18,14 +18,12 @@ func initialize(mem_size:int, use_reserved:bool, preloads:Array, callable:Callab
 	if use_reserved:
 		for key in preloads:
 			var trans:VerhoTransition = load(lib[key]).instantiate()
-			trans.InMemory = true
 			trans.finished_transition.connect(callable)
 			_reserved_memory[lib[key]] = trans
 		##
 	else:
 		for key in preloads:
 			var trans:VerhoTransition = load(lib[key]).instantiate()
-			trans.InMemory = true
 			trans.finished_transition.connect(callable)
 			_transition_memory.push_back([lib[key], trans])
 			if _transition_memory.size() + 1 > _mem_size:
