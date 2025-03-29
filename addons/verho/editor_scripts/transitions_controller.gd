@@ -151,3 +151,56 @@ func load_data(data:Array) -> bool:
 	
 	return true
 ##
+
+func _can_drop_data(_pos, data):
+	if data["type"] != "files":
+		return false
+	##
+	
+	var okay:bool = false
+	for f in data["files"]:
+		if f.get_extension() in ["tscn", "scn"]:
+			okay = true
+			break
+		##
+	##
+	
+	return okay
+##
+
+func _drop_data(_pos, data):
+	for f in data["files"]:
+		var fname = f.get_file().split(".")[0]
+		
+		#=====#
+		var nickbox:LineEdit = nick_template.duplicate(0)
+		nickbox.placeholder_text = nick_template.placeholder_text
+		trans_nickname.add_child(nickbox)
+		trans_nickname.register_text_edit(nickbox, "")
+		nickbox.text = fname
+		nickbox.text_changed.emit(fname)
+		#=====#
+		
+		#=====#
+		var pathbox = ffl_template.duplicate(4)
+		trans_location.add_child(pathbox)
+		trans_location.register_location_box(pathbox, f)
+		transition_dialog.register_file_folder_label(pathbox)
+		#=====#
+		
+		#=====#
+		var add_btn = add_template.duplicate(0)
+		add_btn.pressed.connect(_on_add_below_pressed.bind(add_btn))
+		add_below.add_child(add_btn)
+		#=====#
+		
+		#=====#
+		var delete_btn = del_template.duplicate(0)
+		delete_btn.pressed.connect(_delete_pressed.bind(delete_btn))
+		delete_btn.disabled = false
+		delete.add_child(delete_btn)
+		#=====#
+	##
+	
+	_edit_occurred()
+##

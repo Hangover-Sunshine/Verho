@@ -62,7 +62,7 @@ func _get_plugin_name():
 ##
 
 func _get_plugin_icon():
-	return EditorInterface.get_editor_theme().get_icon("Node", "EditorIcons")
+	return load("res://addons/verho/resources/verho-small.png")
 ##
 
 func _get_state():
@@ -71,7 +71,6 @@ func _get_state():
 #region Save To Disk
 		_save_to_disk(data)
 #endregion
-		print(data)
 	##
 	
 	return data
