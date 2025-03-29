@@ -1,3 +1,13 @@
 # Godot 4+ specific ignores
 .godot/
-project.godot
+
+# Folder ignores
+assets/
+prefabs/
+scenes/
+scripts/
+
+# File ignores
+export_presets.cfg
+verho.blob
+verho.json
