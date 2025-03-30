@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://hxmm2k8u0tfl" path="res://addons/verho/verho/verho.gd" id="1_h25f0"]
 
 [node name="Verho" type="Control"]
+process_mode = 3
 z_index = 4096
 z_as_relative = false
 layout_mode = 3
