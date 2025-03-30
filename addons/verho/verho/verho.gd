@@ -73,7 +73,6 @@ func _ready():
 	##
 	
 	_load_after_fade_out = !data["immediate"]
-	_keep_preloads_in_memory = data["keep_preloads"]
 	
 	for key in data["scenes"].keys():
 		_scene_library[key] = data["scenes"][key]
